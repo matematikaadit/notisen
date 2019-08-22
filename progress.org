@@ -13,7 +13,7 @@ Or from the source tree in ~src/plugins/weechat-plugin.h~
 * bindgen
 
 #+BEGIN_SRC sh-session
-$ bindgen weechat-plugin.h -o weechat_plugin.rs
+$ bindgen weechat-plugin.h -o plugin.rs
 #+END_SRC
 
 Wait a few minutes for it to finish.
@@ -43,3 +43,6 @@ https://github.com/KenjiE20/highmon/blob/dfc885e4a68191ec4fec0c0f51775bbdbaa0494
 (this should point to current master as of this writing)
 
 
+* Nomicon Docs
+
+https://doc.rust-lang.org/nomicon/ffi.html

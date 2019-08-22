@@ -4,9 +4,12 @@ example.so: example.o
 example.o: example.c weechat-plugin.h
 	$(CC) -fPIC -Wall -c example.c
 
-install: example.so
+hl.so: hl.rs plugin.rs
+	rustc --crate-type dylib hl.rs -o hl.so
+
+install: hl.so
 	mkdir -p $$HOME/.weechat/plugins
-	cp example.so $$HOME/.weechat/plugins
+	cp hl.so $$HOME/.weechat/plugins
 
 uninstall:
 	rm -rf $$HOME/.weechat/plugins/example.so
