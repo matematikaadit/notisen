@@ -1,0 +1,45 @@
+#+TITLE: Documenting the Progress of Writing Hexchat Plugin in Rust
+
+* Docs Links
+https://weechat.org/files/doc/devel/weechat_plugin_api.en.html
+
+* File to Include
+
+~weechat-plugin.h~
+
+Get it from the install path in ~include/weechat/weechat-plugin.h~
+Or from the source tree in ~src/plugins/weechat-plugin.h~
+
+* bindgen
+
+#+BEGIN_SRC sh-session
+$ bindgen weechat-plugin.h -o weechat_plugin.rs
+#+END_SRC
+
+Wait a few minutes for it to finish.
+
+
+* C Examples
+
+See ~example.c~. Also inspect the ~Makefile~ on how to compile and where to install the resulting plugin.
+
+* C Macro in weechat-plugin.h
+
+How to translate it?
+
+Ans: Expand it manually
+
+* How to Export char[]?
+
+#+BEGIN_SRC rust
+#[no_mangle]
+pub static foo: [u8; $SIZE] = *b"$CONTENT\0";
+#+END_SRC
+
+* RIIR Target
+
+https://github.com/KenjiE20/highmon/blob/dfc885e4a68191ec4fec0c0f51775bbdbaa0494a/highmon.pl
+
+(this should point to current master as of this writing)
+
+
