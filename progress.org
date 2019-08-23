@@ -1,14 +1,29 @@
 #+TITLE: Documenting the Progress of Writing Weechat Plugin in Rust
 
+* Disclaimer
+
+If you wanna write Weechat Plugin, there's already a great lib written by poljar, 
+https://github.com/poljar/rust-weechat
+
+Otherwise, If you wanna know how to write those *-sys crate, go to
+https://kornel.ski/rust-sys-crate
+instead
+
+This is a documentation about me trying to understand the ffi primitives in rust.
+It's based on rewriting perl script, highmon for weechat, in rust.
+I don't use cargo since I wanna as little magic as possible.
+And the real goal is to understand what actually happened.
+
 * Docs Links
+
 https://weechat.org/files/doc/devel/weechat_plugin_api.en.html
 
 * File to Include
 
 ~weechat-plugin.h~
 
-Get it from the install path in ~include/weechat/weechat-plugin.h~
-Or from the source tree in ~src/plugins/weechat-plugin.h~
+Get it from the install path in ~$PREFIX/include/weechat/weechat-plugin.h~
+Or from the source tree in ~$CHECKOUT/src/plugins/weechat-plugin.h~
 
 * bindgen
 
@@ -49,4 +64,21 @@ https://doc.rust-lang.org/nomicon/ffi.html
 * Helper C2Rust
 
 https://c2rust.com/
+
+
+* A Working Reference/Attempt
+
+https://github.com/poljar/rust-weechat
+
+* How to Represent #define String Literal?
+
+For example
+
+#+BEGIN_EXAMPLE
+#define WEECHAT_CONFIG_OPTION_NULL "null"
+#+END_EXAMPLE
+
+* Resource About Rust FFI
+
+https://kornel.ski/rust-sys-crate
 
