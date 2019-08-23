@@ -1,4 +1,4 @@
-#+TITLE: Documenting the Progress of Writing Hexchat Plugin in Rust
+#+TITLE: Documenting the Progress of Writing Weechat Plugin in Rust
 
 * Docs Links
 https://weechat.org/files/doc/devel/weechat_plugin_api.en.html
@@ -42,7 +42,11 @@ https://github.com/KenjiE20/highmon/blob/dfc885e4a68191ec4fec0c0f51775bbdbaa0494
 
 (this should point to current master as of this writing)
 
-
 * Nomicon Docs
 
 https://doc.rust-lang.org/nomicon/ffi.html
+
+* Helper C2Rust
+
+https://c2rust.com/
+
