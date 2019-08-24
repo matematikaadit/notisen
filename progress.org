@@ -10,8 +10,8 @@ https://kornel.ski/rust-sys-crate
 instead
 
 This is a documentation about me trying to understand the ffi primitives in rust.
-It's based on rewriting perl script, highmon for weechat, in rust.
-I don't use cargo since I wanna as little magic as possible.
+It's based on rewriting perl script for weechat, highmon, in rust.
+I don't use cargo since I wanna use as little magic as possible.
 And the real goal is to understand what actually happened.
 
 * Docs Links
