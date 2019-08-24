@@ -208,23 +208,23 @@ use core::ffi::c_void;
 #[derive(Copy, Clone)]
 pub struct t_weechat_plugin {
     /* plugin variables */
-    pub filename:    *const u8,               /* name of plugin on disk            */
-    pub handle:      *const c_void,           /* handle of plugin (given by dlopen)*/
-    pub name:        *const u8,               /* short name                        */
-    pub description: *const u8,               /* description                       */
-    pub author:      *const u8,               /* author                            */
-    pub version:     *const u8,               /* plugin version                    */
-    pub license:     *const u8,               /* license                           */
-    pub charset:     *const u8,               /* charset used by plugin            */
-    pub priority:    i32,                     /* plugin priority (default is 1000) */
-    pub initialized: i32,                     /* plugin initialized? (init called) */
-    pub debug:       i32,                     /* debug level for plugin (0=off)    */
-    pub upgrading:   i32,                     /* 1 if the plugin must load upgrade */
-                                              /* info on startup (if weechat is    */
-                                              /* run with --upgrade)               */
-    pub variables:   *const t_hashtable,      /* plugin custom variables           */
-    pub prev_plugin: *const t_weechat_plugin, /* link to previous plugin           */
-    pub next_plugin: *const t_weechat_plugin, /* link to next plugin               */
+    pub filename:    *mut u8,               /* name of plugin on disk            */
+    pub handle:      *mut c_void,           /* handle of plugin (given by dlopen)*/
+    pub name:        *mut u8,               /* short name                        */
+    pub description: *mut u8,               /* description                       */
+    pub author:      *mut u8,               /* author                            */
+    pub version:     *mut u8,               /* plugin version                    */
+    pub license:     *mut u8,               /* license                           */
+    pub charset:     *mut u8,               /* charset used by plugin            */
+    pub priority:    i32,                   /* plugin priority (default is 1000) */
+    pub initialized: i32,                   /* plugin initialized? (init called) */
+    pub debug:       i32,                   /* debug level for plugin (0=off)    */
+    pub upgrading:   i32,                   /* 1 if the plugin must load upgrade */
+                                            /* info on startup (if weechat is    */
+                                            /* run with --upgrade)               */
+    pub variables:   *mut t_hashtable,      /* plugin custom variables           */
+    pub prev_plugin: *mut t_weechat_plugin, /* link to previous plugin           */
+    pub next_plugin: *mut t_weechat_plugin, /* link to next plugin               */
 
     /*
      * plugin functions (API)
@@ -233,39 +233,116 @@ pub struct t_weechat_plugin {
      */
 
     /* plugins */
-    pub plugin_get_name: unsafe extern "C" fn(plugin: *const t_weechat_plugin) -> *const u8,
+    pub plugin_get_name:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin
+        ) -> *const u8,
 
     /* strings */
-    pub charset_set: unsafe extern "C" fn(plugin: *const t_weechat_plugin, charset: *const u8),
-    pub iconv_to_internal: unsafe extern "C" fn(
-        charset: *const u8,
-        string: *const u8) -> *mut u8,
+    pub charset_set:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            charset: *const u8
+        ),
+    pub iconv_to_internal:
+        unsafe extern "C" fn(
+            charset: *const u8,
+            string: *const u8
+        ) -> *mut u8,
+    pub iconv_from_internal:
+        unsafe extern "C" fn(
+            charset: *const u8,
+            string: *const u8
+        ) -> *mut u8,
+    pub gettext:
+        unsafe extern "C" fn(
+            string: *const u8
+        ) -> *const u8,
+    pub ngettext:
+        unsafe extern "C" fn(
+            single *const u8,
+            plural: *const u8,
+            count: i32
+        ) -> *const u8,
+    pub strndup:
+        unsafe extern "C" fn(
+            string: *const u8,
+            length: i32
+        ) -> *mut u8,
+    pub string_tolower:
+        unsafe extern "C" fn(
+            string: *mut u8
+        ),
+    pub string_toupper:
+        unsafe extern "C" fn(
+            string: *mut u8
+        ),
+    pub strcasecmp: 
+        unsafe extern "C" fn(
+            string1: *const u8,
+            string2: *const u8
+        ) -> i32,
+    pub strcasecmp_range:
+        unsafe extern "C" fn(
+            string1: *const u8,
+            string2: *const u8,
+            range: i32,
+        ) -> i32,
+    pub strncasecmp:
+        unsafe extern "C" fn(
+            string1: *const u8,
+            string2: *const u8,
+            max: i32,
+        ) -> i32,
+    pub strncasecmp_range:
+        unsafe extern "C" fn(
+            string1: *const u8,
+            string2: *const u8,
+            max: i32,
+            range: i32,
+        ) -> i32,
+    pub strcmp_ignore_chars:
+        unsafe extern "C" fn(
+            string1: *const u8,
+            string2: *const u8,
+            chars_ignored: *const u8,
+            case_sensitive: i32,
+        ) -> i32,
+    pub strcasestr:
+        unsafe extern "C" fn(
+            string: *const u8,
+            search: *const u8,
+        ) -> *const u8,
+    pub strlen_screen:
+        unsafe extern "C" fn(
+            string: *const u8
+        ) -> i32,
+    pub string_match:
+        unsafe extern "C" fn(
+            string: *const u8,
+            mask: *const u8,
+            case_sensitive: i32,
+        ) -> i32,
+    >,
+    pub string_match_list:
+        unsafe extern "C" fn(
+            string: *const u8,
+            masks: *mut *const u8,
+            case_sensitive: i32,
+        ) -> i32,
+    pub string_replace:
+        unsafe extern "C" fn(
+            string: *const u8,
+            search: *const u8,
+            replace: *const u8,
+        ) -> *mut u8,
+    pub string_expand_home:
+        unsafe extern "C" fn(
+            path: *const u8
+        ) -> *mut u8,
 
     // <== TO BE CONTINUED ===
 
-    char *(*iconv_from_internal) (const char *charset, const char *string);
-    const char *(*gettext) (const char *string);
-    const char *(*ngettext) (const char *single, const char *plural, int count);
-    char *(*strndup) (const char *string, int length);
-    void (*string_tolower) (char *string);
-    void (*string_toupper) (char *string);
-    int (*strcasecmp) (const char *string1, const char *string2);
-    int (*strcasecmp_range) (const char *string1, const char *string2,
-                             int range);
-    int (*strncasecmp) (const char *string1, const char *string2, int max);
-    int (*strncasecmp_range) (const char *string1, const char *string2,
-                              int max, int range);
-    int (*strcmp_ignore_chars) (const char *string1, const char *string2,
-                                const char *chars_ignored, int case_sensitive);
-    const char *(*strcasestr) (const char *string, const char *search);
-    int (*strlen_screen) (const char *string);
-    int (*string_match) (const char *string, const char *mask,
-                         int case_sensitive);
-    int (*string_match_list) (const char *string, const char **masks,
-                              int case_sensitive);
-    char *(*string_replace) (const char *string, const char *search,
-                             const char *replace);
-    char *(*string_expand_home) (const char *path);
     char *(*string_eval_path_home) (const char *path,
                                     struct t_hashtable *pointers,
                                     struct t_hashtable *extra_vars,
