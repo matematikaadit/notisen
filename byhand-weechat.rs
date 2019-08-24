@@ -158,7 +158,7 @@ pub const WEECHAT_HOOK_CONNECT_GNUTLS_CB_SET_CERT:    i32 = 1
 //             vbuffer = vaa_buffer2;                                      \
 //         }                                                               \
 //     }
-// 
+//
 // /*
 //  * macro to return error in case of missing arguments in callback of
 //  * hook_command
@@ -177,7 +177,7 @@ pub const WEECHAT_HOOK_CONNECT_GNUTLS_CB_SET_CERT:    i32 = 1
 //             argv[0] + 1);                                               \
 //         return WEECHAT_RC_ERROR;                                        \
 //     }
-// 
+//
 // /* macro to return error in callback of hook_command */
 // #define WEECHAT_COMMAND_ERROR                                           \
 //     {                                                                   \
@@ -190,7 +190,7 @@ pub const WEECHAT_HOOK_CONNECT_GNUTLS_CB_SET_CERT:    i32 = 1
 //             argv[0] + 1);                                               \
 //         return WEECHAT_RC_ERROR;                                        \
 //     }
-// 
+//
 
 use core::ffi::c_void;
 // or you can define it manually
@@ -277,7 +277,7 @@ pub struct t_weechat_plugin {
         unsafe extern "C" fn(
             string: *mut u8
         ),
-    pub strcasecmp: 
+    pub strcasecmp:
         unsafe extern "C" fn(
             string1: *const u8,
             string2: *const u8
@@ -340,57 +340,166 @@ pub struct t_weechat_plugin {
         unsafe extern "C" fn(
             path: *const u8
         ) -> *mut u8,
+    pub string_eval_path_home:
+        unsafe extern "C" fn(
+            path: *const u8,
+            pointers: *mut t_hashtable,
+            extra_vars: *mut t_hashtable,
+            options: *mut t_hashtable,
+        ) -> *mut u8,
+    pub string_remove_quotes:
+        unsafe extern "C" fn(
+            string: *const u8,
+            quotes: *const u8,
+        ) -> *mut u8,
+    pub string_strip:
+        unsafe extern "C" fn(
+            string: *const u8,
+            left: i32,
+            right: i32,
+            chars: *const u8,
+        ) -> *mut u8,
+    pub string_convert_escaped_chars:
+        unsafe extern "C" fn(
+            string: *const u8
+        ) -> *mut u8,
+    pub string_mask_to_regex:
+        unsafe extern "C" fn(
+            mask: *const u8
+        ) -> *mut u8,
+    pub string_regex_flags:
+        unsafe extern "C" fn(
+            regex: *const u8,
+            default_flags: i32,
+            flags: *mut i32,
+        ) -> *const u8,
+    pub string_regcomp:
+        unsafe extern "C" fn(
+            preg: *mut c_void,
+            regex: *const u8,
+            default_flags: i32,
+        ) -> i32,
+    pub string_has_highlight:
+        unsafe extern "C" fn(
+            string: *const u8,
+            highlight_words: *const u8,
+        ) -> i32,
+    pub string_has_highlight_regex:
+        unsafe extern "C" fn(
+            string: *const u8,
+            regex: *const u8,
+        ) -> i32,
+    pub string_replace_regex:
+        unsafe extern "C" fn(
+            string: *const u8,
+            regex: *mut c_void,
+            replace: *const u8,
+            reference_char: u8,
+            callback:
+                unsafe extern "C" fn(
+                    data: *mut c_void,
+                    text: *const u8,
+                ) -> *mut u8,
+            callback_data: *mut c_void,
+        ) -> *mut u8,
+    pub string_split:
+        unsafe extern "C" fn(
+            string: *const u8,
+            separators: *const u8,
+            strip_items: *const u8,
+            flags: i32,
+            num_items_max: i32,
+            num_items: *mut i32,
+        ) -> *mut *mut u8,
+    pub string_split_shell:
+        unsafe extern "C" fn(
+            string: *const u8,
+            num_items: *mut i32,
+        ) -> *mut *mut u8,
+    pub string_free_split:
+        unsafe extern "C" fn(
+            split_string: *mut *mut u8
+        ),
+    pub string_build_with_split_string:
+        unsafe extern "C" fn(
+            split_string: *mut *const u8,
+            separator: *const u8,
+        ) -> *mut u8,
+    pub string_split_command:
+        unsafe extern "C" fn(
+            command: *const u8,
+            separator: u8,
+        ) -> *mut *mut u8,
+    pub string_free_split_command:
+        unsafe extern "C" fn(
+            split_command: *mut *mut u8
+        ),
+    pub string_format_size:
+        unsafe extern "C" fn(
+            size: u64
+        ) -> *mut u8,
+    pub string_remove_color:
+        unsafe extern "C" fn(
+            string: *const u8,
+            replacement: *const u8,
+        ) -> *mut u8,
+    pub string_base_encode:
+        unsafe extern "C" fn(
+            base: i32,
+            from: *const u8,
+            length: i32,
+            to: *mut u8,
+        ) -> i32,
+    pub string_base_decode:
+        unsafe extern "C" fn(
+            base: i32,
+            from: *const u8,
+            to: *mut u8,
+        ) -> i32,
+    pub string_hex_dump:
+        unsafe extern "C" fn(
+            data: *const u8,
+            data_size: i32,
+            bytes_per_line: i32,
+            prefix: *const u8,
+            suffix: *const u8,
+        ) -> *mut u8,
+    pub string_is_command_char:
+        unsafe extern "C" fn(
+            string: *const u8
+        ) -> i32,
+    pub string_input_for_buffer:
+        unsafe extern "C" fn(
+            string: *const u8,
+        ) -> *const u8,
+    pub string_eval_expression:
+        unsafe extern "C" fn(
+            expr: *const u8,
+            pointers: *mut t_hashtable,
+            extra_vars: *mut t_hashtable,
+            options: *mut t_hashtable,
+        ) -> *mut u8,
+    pub string_dyn_alloc:
+        unsafe extern "C" fn(
+            size_alloc: i32
+        ) -> *mut *mut u8,
+    pub string_dyn_copy:
+        unsafe extern "C" fn(
+            string: *mut *mut u8,
+            new_string: *const u8,
+        ) -> i32,
+    pub string_dyn_concat:
+        unsafe extern "C" fn(
+            string: *mut *mut u8,
+            add: *const u8,
+        ) -> i32,
+    pub string_dyn_free:
+        unsafe extern "C" fn(
+            string: *mut *mut u8,
+            free_string: i32,
+        ) -> *mut u8,
 
     // <== TO BE CONTINUED ===
-
-    char *(*string_eval_path_home) (const char *path,
-                                    struct t_hashtable *pointers,
-                                    struct t_hashtable *extra_vars,
-                                    struct t_hashtable *options);
-    char *(*string_remove_quotes) (const char *string, const char *quotes);
-    char *(*string_strip) (const char *string, int left, int right,
-                           const char *chars);
-    char *(*string_convert_escaped_chars) (const char *string);
-    char *(*string_mask_to_regex) (const char *mask);
-    const char *(*string_regex_flags) (const char *regex, int default_flags,
-                                       int *flags);
-    int (*string_regcomp) (void *preg, const char *regex, int default_flags);
-    int (*string_has_highlight) (const char *string,
-                                 const char *highlight_words);
-    int (*string_has_highlight_regex) (const char *string, const char *regex);
-    char *(*string_replace_regex) (const char *string, void *regex,
-                                   const char *replace,
-                                   const char reference_char,
-                                   char *(*callback)(void *data,
-                                                     const char *text),
-                                   void *callback_data);
-    char **(*string_split) (const char *string, const char *separators,
-                            const char *strip_items, int flags,
-                            int num_items_max, int *num_items);
-    char **(*string_split_shell) (const char *string, int *num_items);
-    void (*string_free_split) (char **split_string);
-    char *(*string_build_with_split_string) (const char **split_string,
-                                             const char *separator);
-    char **(*string_split_command) (const char *command, char separator);
-    void (*string_free_split_command) (char **split_command);
-    char *(*string_format_size) (unsigned long long size);
-    char *(*string_remove_color) (const char *string, const char *replacement);
-    int (*string_base_encode) (int base, const char *from, int length,
-                               char *to);
-    int (*string_base_decode) (int base, const char *from, char *to);
-    char *(*string_hex_dump) (const char *data, int data_size,
-                              int bytes_per_line, const char *prefix,
-                              const char *suffix);
-    int (*string_is_command_char) (const char *string);
-    const char *(*string_input_for_buffer) (const char *string);
-    char *(*string_eval_expression )(const char *expr,
-                                     struct t_hashtable *pointers,
-                                     struct t_hashtable *extra_vars,
-                                     struct t_hashtable *options);
-    char **(*string_dyn_alloc) (int size_alloc);
-    int (*string_dyn_copy) (char **string, const char *new_string);
-    int (*string_dyn_concat) (char **string, const char *add);
-    char *(*string_dyn_free) (char **string, int free_string);
 
     /* UTF-8 strings */
     int (*utf8_has_8bits) (const char *string);
