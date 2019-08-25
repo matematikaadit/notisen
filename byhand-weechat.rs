@@ -638,34 +638,81 @@ pub struct t_weechat_plugin {
             version: *const u8
         ) -> i32,
 
-    // ~~~ PAUSE ~~~
-
     /* sorted lists */
-    struct t_weelist *(*list_new) ();
-    struct t_weelist_item *(*list_add) (struct t_weelist *weelist,
-                                        const char *data,
-                                        const char *where,
-                                        void *user_data);
-    struct t_weelist_item *(*list_search) (struct t_weelist *weelist,
-                                           const char *data);
-    int (*list_search_pos) (struct t_weelist *weelist,
-                            const char *data);
-    struct t_weelist_item *(*list_casesearch) (struct t_weelist *weelist,
-                                               const char *data);
-    int (*list_casesearch_pos) (struct t_weelist *weelist,
-                                const char *data);
-    struct t_weelist_item *(*list_get) (struct t_weelist *weelist,
-                                        int position);
-    void (*list_set) (struct t_weelist_item *item, const char *value);
-    struct t_weelist_item *(*list_next) (struct t_weelist_item *item);
-    struct t_weelist_item *(*list_prev) (struct t_weelist_item *item);
-    const char *(*list_string) (struct t_weelist_item *item);
-    void *(*list_user_data) (struct t_weelist_item *item);
-    int (*list_size) (struct t_weelist *weelist);
-    void (*list_remove) (struct t_weelist *weelist,
-                         struct t_weelist_item *item);
-    void (*list_remove_all) (struct t_weelist *weelist);
-    void (*list_free) (struct t_weelist *weelist);
+    pub list_new:
+        unsafe extern "C" fn() -> *mut t_weelist,
+    pub list_add:
+        unsafe extern "C" fn(
+            weelist: *mut t_weelist,
+            data: *const u8,
+            where_: *const u8,
+            user_data: *mut c_void,
+        ) -> *mut t_weelist_item,
+    pub list_search:
+        unsafe extern "C" fn(
+            weelist: *mut t_weelist,
+            data: *const u8,
+        ) -> *mut t_weelist_item,
+    pub list_search_pos:
+        unsafe extern "C" fn(
+            weelist: *mut t_weelist,
+            data: *const u8,
+        ) -> i32,
+    pub list_casesearch:
+        unsafe extern "C" fn(
+            weelist: *mut t_weelist,
+            data: *const u8,
+        ) -> *mut t_weelist_item,
+    pub list_casesearch_pos:
+        unsafe extern "C" fn(
+            weelist: *mut t_weelist,
+            data: *const u8,
+        ) -> i32,
+    pub list_get:
+        unsafe extern "C" fn(
+            weelist: *mut t_weelist,
+            position: i32,
+        ) -> *mut t_weelist_item,
+    pub list_set:
+        unsafe extern "C" fn(
+            item: *mut t_weelist_item,
+            value: *const u8
+        ),
+    pub list_next:
+        unsafe extern "C" fn(
+            item: *mut t_weelist_item
+        ) -> *mut t_weelist_item,
+    pub list_prev:
+        unsafe extern "C" fn(
+            item: *mut t_weelist_item
+        ) -> *mut t_weelist_item,
+    pub list_string:
+        unsafe extern "C" fn(
+            item: *mut t_weelist_item
+        ) -> *const u8,
+    pub list_user_data:
+        unsafe extern "C" fn(
+            item: *mut t_weelist_item
+        ) -> *mut c_void,
+    pub list_size:
+        unsafe extern "C" fn(
+            weelist: *mut t_weelist
+        ) -> i32,
+    pub list_remove:
+        unsafe extern "C" fn(
+            weelist: *mut t_weelist,
+            item: *mut t_weelist_item
+        ),
+    pub list_remove_all:
+        unsafe extern "C" fn(
+            weelist: *mut t_weelist
+        ),
+    pub list_free:
+        unsafe extern "C" fn(
+            weelist: *mut t_weelist
+        ),
+
+    // ~~~ PAUSE ~~~
 
     /* array lists */
     struct t_arraylist *(*arraylist_new) (int initial_size,
