@@ -613,14 +613,32 @@ pub struct t_weechat_plugin {
             filename: *const u8,
         ) -> *mut u8,
 
-    // ~~~ PAUSE ~~~
-
     /* util */
-    int (*util_timeval_cmp) (struct timeval *tv1, struct timeval *tv2);
-    long long (*util_timeval_diff) (struct timeval *tv1, struct timeval *tv2);
-    void (*util_timeval_add) (struct timeval *tv, long long interval);
-    const char *(*util_get_time_string) (const time_t *date);
-    int (*util_version_number) (const char *version);
+    pub util_timeval_cmp:
+        unsafe extern "C" fn(
+            tv1: *mut timeval,
+            tv2: *mut timeval
+        ) -> i32,
+    pub util_timeval_diff:
+        unsafe extern "C" fn(
+            tv1: *mut timeval,
+            tv2: *mut timeval
+        ) -> i64,
+    pub util_timeval_add:
+        unsafe extern "C" fn(
+            tv: *mut timeval,
+            interval: i64
+        ),
+    pub util_get_time_string:
+        unsafe extern "C" fn(
+            date: *const time_t
+        ) -> *const  u8,
+    pub util_version_number:
+        unsafe extern "C" fn(
+            version: *const u8
+        ) -> i32,
+
+    // ~~~ PAUSE ~~~
 
     /* sorted lists */
     struct t_weelist *(*list_new) ();
