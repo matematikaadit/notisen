@@ -526,14 +526,30 @@ pub struct t_weechat_plugin {
         unsafe extern "C" fn(
             string: *const u8,
         ) -> *const u8,
+    pub utf8_char_int:
+        unsafe extern "C" fn(
+            string: *const u8
+        ) -> i32,
+    pub utf8_char_size:
+        unsafe extern "C" fn(
+            string: *const u8
+        ) -> i32,
+    pub utf8_strlen:
+        unsafe extern "C" fn(
+            string: *const u8
+        ) -> i32,
+    pub utf8_strnlen:
+        unsafe extern "C" fn(
+            string: *const u8,
+            bytes: i32,
+        ) -> i32,
+    pub utf8_strlen_screen:
+        unsafe extern "C" fn(
+            string: *const u8
+        ) -> i32,
 
     // ~~~ PAUSE ~~~
 
-    int (*utf8_char_int) (const char *string);
-    int (*utf8_char_size) (const char *string);
-    int (*utf8_strlen) (const char *string);
-    int (*utf8_strnlen) (const char *string, int bytes);
-    int (*utf8_strlen_screen) (const char *string);
     int (*utf8_charcmp) (const char *string1, const char *string2);
     int (*utf8_charcasecmp) (const char *string1, const char *string2);
     int (*utf8_char_size_screen) (const char *string);
