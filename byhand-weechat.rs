@@ -502,12 +502,33 @@ pub struct t_weechat_plugin {
     // <== TO BE CONTINUED ===
 
     /* UTF-8 strings */
-    int (*utf8_has_8bits) (const char *string);
-    int (*utf8_is_valid) (const char *string, int length, char **error);
-    void (*utf8_normalize) (char *string, char replacement);
-    const char *(*utf8_prev_char) (const char *string_start,
-                                   const char *string);
-    const char *(*utf8_next_char) (const char *string);
+    pub utf8_has_8bits:
+        unsafe extern "C" fn(
+            string: *const u8
+        ) -> i32,
+    pub utf8_is_valid:
+        unsafe extern "C" fn(
+            string: *const u8,
+            length: i32,
+            error: *mut *mut u8,
+        ) -> i32,
+    pub utf8_normalize:
+        unsafe extern "C" fn(
+            string: *mut u8,
+            replacement: u8,
+        ),
+    pub utf8_prev_char:
+        unsafe extern "C" fn(
+            string_start: *const u8,
+            string: *const u8,
+        ) -> *const u8,
+    pub utf8_next_char:
+        unsafe extern "C" fn(
+            string: *const u8,
+        ) -> *const u8,
+
+    // ~~~ PAUSE ~~~
+
     int (*utf8_char_int) (const char *string);
     int (*utf8_char_size) (const char *string);
     int (*utf8_strlen) (const char *string);
