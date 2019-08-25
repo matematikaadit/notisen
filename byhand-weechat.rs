@@ -499,8 +499,6 @@ pub struct t_weechat_plugin {
             free_string: i32,
         ) -> *mut u8,
 
-    // <== TO BE CONTINUED ===
-
     /* UTF-8 strings */
     pub utf8_has_8bits:
         unsafe extern "C" fn(
@@ -582,17 +580,40 @@ pub struct t_weechat_plugin {
             length: i32,
         ) -> *mut u8,
 
-    // ~~~ PAUSE ~~~
-
     /* directories/files */
-    int (*mkdir_home) (const char *directory, int mode);
-    int (*mkdir) (const char *directory, int mode);
-    int (*mkdir_parents) (const char *directory, int mode);
-    void (*exec_on_files) (const char *directory, int recurse_subdirs,
-                           int hidden_files,
-                           void (*callback)(void *data, const char *filename),
-                           void *callback_data);
-    char *(*file_get_content) (const char *filename);
+    pub mkdir_home:
+        unsafe extern "C" fn(
+            directory: *const u8,
+            mode: i32,
+        ) -> i32,
+    pub mkdir:
+        unsafe extern "C" fn(
+            directory: *const u8,
+            mode: i32,
+        ) -> i32,
+    pub mkdir_parents:
+        unsafe extern "C" fn(
+            directory: *const u8,
+            mode: i32,
+        ) -> i32,
+    pub exec_on_files:
+        unsafe extern "C" fn(
+            directory: *const u8,
+            recurse_subdirs: i32,
+            hidden_files: i32,
+            callback:
+                unsafe extern "C" fn(
+                    data: *mut c_void,
+                    filename: *const u8,
+                ),
+            callback_data: *mut c_void,
+        ),
+    pub file_get_content:
+        unsafe extern "C" fn(
+            filename: *const u8,
+        ) -> *mut u8,
+
+    // ~~~ PAUSE ~~~
 
     /* util */
     int (*util_timeval_cmp) (struct timeval *tv1, struct timeval *tv2);
