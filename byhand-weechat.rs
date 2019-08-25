@@ -712,31 +712,70 @@ pub struct t_weechat_plugin {
             weelist: *mut t_weelist
         ),
 
-    // ~~~ PAUSE ~~~
-
     /* array lists */
-    struct t_arraylist *(*arraylist_new) (int initial_size,
-                                          int sorted,
-                                          int allow_duplicates,
-                                          int (*callback_cmp)(void *data,
-                                                              struct t_arraylist *arraylist,
-                                                              void *pointer1,
-                                                              void *pointer2),
-                                          void *callback_cmp_data,
-                                          void (*callback_free)(void *data,
-                                                                struct t_arraylist *arraylist,
-                                                                void *pointer),
-                                          void *callback_free_data);
-    int (*arraylist_size) (struct t_arraylist *arraylist);
-    void *(*arraylist_get) (struct t_arraylist *arraylist, int index);
-    void *(*arraylist_search) (struct t_arraylist *arraylist, void *pointer,
-                               int *index, int *index_insert);
-    int (*arraylist_insert) (struct t_arraylist *arraylist, int index,
-                             void *pointer);
-    int (*arraylist_add) (struct t_arraylist *arraylist, void *pointer);
-    int (*arraylist_remove) (struct t_arraylist *arraylist, int index);
-    int (*arraylist_clear) (struct t_arraylist *arraylist);
-    void (*arraylist_free) (struct t_arraylist *arraylist);
+    pub arraylist_new:
+        unsafe extern "C" fn(
+            initial_size: i32,
+            sorted: i32,
+            allow_duplicates: i32,
+            callback_cmp:
+                unsafe extern "C" fn(
+                    data: *mut c_void,
+                    arraylist: *mut t_arraylist,
+                    pointer1: *mut c_void,
+                    pointer2: *mut c_void,
+                ) -> i32,
+            callback_cmp_data: *mut c_void,
+            callback_free:
+                unsafe extern "C" fn(
+                    data: *mut c_void,
+                    arraylist: *mut t_arraylist,
+                    pointer: *mut c_void,
+                ),
+            callback_free_data: *mut c_void,
+        ) -> *mut t_arraylist,
+    pub arraylist_size:
+        unsafe extern "C" fn(
+            arraylist: *mut t_arraylist
+        ) -> i32,
+    pub arraylist_get:
+        unsafe extern "C" fn(
+            arraylist: *mut t_arraylist,
+            index: i32,
+        ) -> *mut c_void,
+    pub arraylist_search:
+        unsafe extern "C" fn(
+            arraylist: *mut t_arraylist,
+            pointer: *mut c_void,
+            index: *mut i32,
+            index_insert: *mut i32,
+        ) -> *mut c_void,
+    pub arraylist_insert:
+        unsafe extern "C" fn(
+            arraylist: *mut t_arraylist,
+            index: i32,
+            pointer: *mut c_void,
+        ) -> i32,
+    pub arraylist_add:
+        unsafe extern "C" fn(
+            arraylist: *mut t_arraylist,
+            pointer: *mut c_void,
+        ) -> i32,
+    pub arraylist_remove:
+        unsafe extern "C" fn(
+            arraylist: *mut t_arraylist,
+            index: i32,
+        ) -> i32,
+    pub arraylist_clear:
+        unsafe extern "C" fn(
+            arraylist: *mut t_arraylist
+        ) -> i32,
+    pub arraylist_free:
+        unsafe extern "C" fn(
+            arraylist: *mut t_arraylist
+        ),
+
+    // ~~~ PAUSE ~~~
 
     /* hash tables */
     struct t_hashtable *(*hashtable_new) (int size,
