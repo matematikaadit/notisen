@@ -547,16 +547,42 @@ pub struct t_weechat_plugin {
         unsafe extern "C" fn(
             string: *const u8
         ) -> i32,
+    pub utf8_charcmp:
+        unsafe extern "C" fn(
+            string1: *const u8,
+            string2: *const u8,
+        ) -> i32,
+    pub utf8_charcasecmp:
+        unsafe extern "C" fn(
+            string1: *const u8,
+            string2: *const u8,
+        ) -> i32,
+    pub utf8_char_size_screen:
+        unsafe extern "C" fn(
+            string: *const u8
+        ) -> i32,
+    pub utf8_add_offset:
+        unsafe extern "C" fn(
+            string: *const u8,
+            offset: i32,
+        ) -> *const u8,
+    pub utf8_real_pos:
+        unsafe extern "C" fn(
+            string: *const u8,
+            pos: i32,
+        ) -> i32,
+    pub utf8_pos:
+        unsafe extern "C" fn(
+            string: *const u8,
+            real_pos: i32,
+        ) -> i32,
+    pub utf8_strndup:
+        unsafe extern "C" fn(
+            string: *const u8,
+            length: i32,
+        ) -> *mut u8,
 
     // ~~~ PAUSE ~~~
-
-    int (*utf8_charcmp) (const char *string1, const char *string2);
-    int (*utf8_charcasecmp) (const char *string1, const char *string2);
-    int (*utf8_char_size_screen) (const char *string);
-    const char *(*utf8_add_offset) (const char *string, int offset);
-    int (*utf8_real_pos) (const char *string, int pos);
-    int (*utf8_pos) (const char *string, int real_pos);
-    char *(*utf8_strndup) (const char *string, int length);
 
     /* directories/files */
     int (*mkdir_home) (const char *directory, int mode);
