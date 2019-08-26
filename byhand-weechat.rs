@@ -1284,273 +1284,537 @@ pub struct t_weechat_plugin {
     // ~~~ PAUSE ~~~
 
     /* key bindings */
-    int (*key_bind) (const char *context, struct t_hashtable *keys);
-    int (*key_unbind) (const char *context, const char *key);
+    pub key_bind:
+        unsafe extern "C" fn(
+            context: *const u8,
+            keys: *mut t_hashtable,
+        ) -> i32,
+
+    pub key_unbind:
+        unsafe extern "C" fn(
+            context: *const u8,
+            key: *const u8,
+        ) -> i32,
 
     /* display */
-    const char *(*prefix) (const char *prefix);
-    const char *(*color) (const char *color_name);
-    void (*printf_date_tags) (struct t_gui_buffer *buffer, time_t date,
-                              const char *tags, const char *message, ...);
-    void (*printf_y) (struct t_gui_buffer *buffer, int y,
-                      const char *message, ...);
-    void (*log_printf) (const char *message, ...);
+    pub prefix:
+        unsafe extern "C" fn(
+            prefix: *const u8,
+        ) -> *const u8,
+
+    pub color:
+        unsafe extern "C" fn(
+            color_name: *const u8,
+        ) -> *const u8,
+
+    pub printf_date_tags:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            date: time_t,
+            tags: *const u8,
+            message: *const u8,
+            ...
+        ),
+
+    pub printf_y:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            y: i32,
+            message: *const u8,
+            ...
+        ),
+
+    pub log_printf:
+        unsafe extern "C" fn(message: *const u8, ...),
 
     /* hooks */
-    struct t_hook *(*hook_command) (struct t_weechat_plugin *plugin,
-                                    const char *command,
-                                    const char *description,
-                                    const char *args,
-                                    const char *args_description,
-                                    const char *completion,
-                                    int (*callback)(const void *pointer,
-                                                    void *data,
-                                                    struct t_gui_buffer *buffer,
-                                                    int argc, char **argv,
-                                                    char **argv_eol),
-                                    const void *callback_pointer,
-                                    void *callback_data);
-    struct t_hook *(*hook_command_run) (struct t_weechat_plugin *plugin,
-                                        const char *command,
-                                        int (*callback)(const void *pointer,
-                                                        void *data,
-                                                        struct t_gui_buffer *buffer,
-                                                        const char *command),
-                                        const void *callback_pointer,
-                                        void *callback_data);
-    struct t_hook *(*hook_timer) (struct t_weechat_plugin *plugin,
-                                  long interval,
-                                  int align_second,
-                                  int max_calls,
-                                  int (*callback)(const void *pointer,
-                                                  void *data,
-                                                  int remaining_calls),
-                                  const void *callback_pointer,
-                                  void *callback_data);
-    struct t_hook *(*hook_fd) (struct t_weechat_plugin *plugin,
-                               int fd,
-                               int flag_read,
-                               int flag_write,
-                               int flag_exception,
-                               int (*callback)(const void *pointer,
-                                               void *data,
-                                               int fd),
-                               const void *callback_pointer,
-                               void *callback_data);
-    struct t_hook *(*hook_process) (struct t_weechat_plugin *plugin,
-                                    const char *command,
-                                    int timeout,
-                                    int (*callback)(const void *pointer,
-                                                    void *data,
-                                                    const char *command,
-                                                    int return_code,
-                                                    const char *out,
-                                                    const char *err),
-                                    const void *callback_pointer,
-                                    void *callback_data);
-    struct t_hook *(*hook_process_hashtable) (struct t_weechat_plugin *plugin,
-                                              const char *command,
-                                              struct t_hashtable *options,
-                                              int timeout,
-                                              int (*callback)(const void *pointer,
-                                                              void *data,
-                                                              const char *command,
-                                                              int return_code,
-                                                              const char *out,
-                                                              const char *err),
-                                              const void *callback_pointer,
-                                              void *callback_data);
-    struct t_hook *(*hook_connect) (struct t_weechat_plugin *plugin,
-                                    const char *proxy,
-                                    const char *address,
-                                    int port,
-                                    int ipv6,
-                                    int retry,
-                                    void *gnutls_sess, void *gnutls_cb,
-                                    int gnutls_dhkey_size,
-                                    const char *gnutls_priorities,
-                                    const char *local_hostname,
-                                    int (*callback)(const void *pointer,
-                                                    void *data,
-                                                    int status,
-                                                    int gnutls_rc,
-                                                    int sock,
-                                                    const char *error,
-                                                    const char *ip_address),
-                                    const void *callback_pointer,
-                                    void *callback_data);
-    struct t_hook *(*hook_line) (struct t_weechat_plugin *plugin,
-                                 const char *buffer_type,
-                                 const char *buffer_name,
-                                 const char *tags,
-                                 struct t_hashtable *(*callback)(const void *pointer,
-                                                                 void *data,
-                                                                 struct t_hashtable *line),
-                                 const void *callback_pointer,
-                                 void *callback_data);
-    struct t_hook *(*hook_print) (struct t_weechat_plugin *plugin,
-                                  struct t_gui_buffer *buffer,
-                                  const char *tags,
-                                  const char *message,
-                                  int strip_colors,
-                                  int (*callback)(const void *pointer,
-                                                  void *data,
-                                                  struct t_gui_buffer *buffer,
-                                                  time_t date,
-                                                  int tags_count,
-                                                  const char **tags,
-                                                  int displayed,
-                                                  int highlight,
-                                                  const char *prefix,
-                                                  const char *message),
-                                  const void *callback_pointer,
-                                  void *callback_data);
-    struct t_hook *(*hook_signal) (struct t_weechat_plugin *plugin,
-                                   const char *signal,
-                                   int (*callback)(const void *pointer,
-                                                   void *data,
-                                                   const char *signal,
-                                                   const char *type_data,
-                                                   void *signal_data),
-                                   const void *callback_pointer,
-                                   void *callback_data);
-    int (*hook_signal_send) (const char *signal, const char *type_data,
-                             void *signal_data);
-    struct t_hook *(*hook_hsignal) (struct t_weechat_plugin *plugin,
-                                    const char *signal,
-                                    int (*callback)(const void *pointer,
-                                                    void *data,
-                                                    const char *signal,
-                                                    struct t_hashtable *hashtable),
-                                    const void *callback_pointer,
-                                    void *callback_data);
-    int (*hook_hsignal_send) (const char *signal,
-                              struct t_hashtable *hashtable);
-    struct t_hook *(*hook_config) (struct t_weechat_plugin *plugin,
-                                   const char *option,
-                                   int (*callback)(const void *pointer,
-                                                   void *data,
-                                                   const char *option,
-                                                   const char *value),
-                                   const void *callback_pointer,
-                                   void *callback_data);
-    struct t_hook *(*hook_completion) (struct t_weechat_plugin *plugin,
-                                       const char *completion_item,
-                                       const char *description,
-                                       int (*callback)(const void *pointer,
-                                                       void *data,
-                                                       const char *completion_item,
-                                                       struct t_gui_buffer *buffer,
-                                                       struct t_gui_completion *completion),
-                                       const void *callback_pointer,
-                                       void *callback_data);
-    const char *(*hook_completion_get_string) (struct t_gui_completion *completion,
-                                               const char *property);
-    void (*hook_completion_list_add) (struct t_gui_completion *completion,
-                                      const char *word,
-                                      int nick_completion,
-                                      const char *where);
-    struct t_hook *(*hook_modifier) (struct t_weechat_plugin *plugin,
-                                     const char *modifier,
-                                     char *(*callback)(const void *pointer,
-                                                       void *data,
-                                                       const char *modifier,
-                                                       const char *modifier_data,
-                                                       const char *string),
-                                     const void *callback_pointer,
-                                     void *callback_data);
-    char *(*hook_modifier_exec) (struct t_weechat_plugin *plugin,
-                                 const char *modifier,
-                                 const char *modifier_data,
-                                 const char *string);
-    struct t_hook *(*hook_info) (struct t_weechat_plugin *plugin,
-                                 const char *info_name,
-                                 const char *description,
-                                 const char *args_description,
-                                 char *(*callback)(const void *pointer,
-                                                   void *data,
-                                                   const char *info_name,
-                                                   const char *arguments),
-                                 const void *callback_pointer,
-                                 void *callback_data);
-    struct t_hook *(*hook_info_hashtable) (struct t_weechat_plugin *plugin,
-                                           const char *info_name,
-                                           const char *description,
-                                           const char *args_description,
-                                           const char *output_description,
-                                           struct t_hashtable *(*callback)(const void *pointer,
-                                                                           void *data,
-                                                                           const char *info_name,
-                                                                           struct t_hashtable *hashtable),
-                                           const void *callback_pointer,
-                                           void *callback_data);
-    struct t_hook *(*hook_infolist) (struct t_weechat_plugin *plugin,
-                                     const char *infolist_name,
-                                     const char *description,
-                                     const char *pointer_description,
-                                     const char *args_description,
-                                     struct t_infolist *(*callback)(const void *cb_pointer,
-                                                                    void *data,
-                                                                    const char *infolist_name,
-                                                                    void *obj_pointer,
-                                                                    const char *arguments),
-                                     const void *callback_pointer,
-                                     void *callback_data);
-    struct t_hook *(*hook_hdata) (struct t_weechat_plugin *plugin,
-                                  const char *hdata_name,
-                                  const char *description,
-                                  struct t_hdata *(*callback)(const void *pointer,
-                                                              void *data,
-                                                              const char *hdata_name),
-                                  const void *callback_pointer,
-                                  void *callback_data);
-    struct t_hook *(*hook_focus) (struct t_weechat_plugin *plugin,
-                                  const char *area,
-                                  struct t_hashtable *(*callback)(const void *pointer,
-                                                                  void *data,
-                                                                  struct t_hashtable *info),
-                                  const void *callback_pointer,
-                                  void *callback_data);
-    void (*hook_set) (struct t_hook *hook, const char *property,
-                      const char *value);
-    void (*unhook) (struct t_hook *hook);
-    void (*unhook_all) (struct t_weechat_plugin *plugin,
-                        const char *subplugin);
+    pub hook_command:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            command: *const u8,
+            description: *const u8,
+            args: *const u8,
+            args_description: *const u8,
+            completion: *const u8,
+            callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    buffer: *mut t_gui_buffer,
+                    argc: i32,
+                    argv: *mut *mut u8,
+                    argv_eol: *mut *mut u8,
+                ) -> i32,
+
+            callback_pointer: *const c_void,
+            callback_data: *mut c_void,
+        ) -> *mut t_hook,
+
+    pub hook_command_run:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            command: *const u8,
+            callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    buffer: *mut t_gui_buffer,
+                    command: *const u8,
+                ) -> i32,
+
+            callback_pointer: *const c_void,
+            callback_data: *mut c_void,
+        ) -> *mut t_hook,
+
+    pub hook_timer:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            interval: i64,
+            align_second: i32,
+            max_calls: i32,
+            callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    remaining_calls: i32,
+                ) -> i32,
+
+            callback_pointer: *const c_void,
+            callback_data: *mut c_void,
+        ) -> *mut t_hook,
+
+    pub hook_fd:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            fd: i32,
+            flag_read: i32,
+            flag_write: i32,
+            flag_exception: i32,
+            callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    fd: i32,
+                ) -> i32,
+
+            callback_pointer: *const c_void,
+            callback_data: *mut c_void,
+        ) -> *mut t_hook,
+
+    pub hook_process:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            command: *const u8,
+            timeout: i32,
+            callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    command: *const u8,
+                    return_code: i32,
+                    out: *const u8,
+                    err: *const u8,
+                ) -> i32,
+
+            callback_pointer: *const c_void,
+            callback_data: *mut c_void,
+        ) -> *mut t_hook,
+
+    pub hook_process_hashtable:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            command: *const u8,
+            options: *mut t_hashtable,
+            timeout: i32,
+            callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    command: *const u8,
+                    return_code: i32,
+                    out: *const u8,
+                    err: *const u8,
+                ) -> i32,
+
+            callback_pointer: *const c_void,
+            callback_data: *mut c_void,
+        ) -> *mut t_hook,
+
+    pub hook_connect:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            proxy: *const u8,
+            address: *const u8,
+            port: i32,
+            ipv6: i32,
+            retry: i32,
+            gnutls_sess: *mut c_void,
+            gnutls_cb: *mut c_void,
+            gnutls_dhkey_size: i32,
+            gnutls_priorities: *const u8,
+            local_hostname: *const u8,
+            callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    status: i32,
+                    gnutls_rc: i32,
+                    sock: i32,
+                    error: *const u8,
+                    ip_address: *const u8,
+                ) -> i32,
+
+            callback_pointer: *const c_void,
+            callback_data: *mut c_void,
+        ) -> *mut t_hook,
+
+    pub hook_line:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            buffer_type: *const u8,
+            buffer_name: *const u8,
+            tags: *const u8,
+            callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    line: *mut t_hashtable,
+                ) -> *mut t_hashtable,
+
+            callback_pointer: *const c_void,
+            callback_data: *mut c_void,
+        ) -> *mut t_hook,
+
+    pub hook_print:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            buffer: *mut t_gui_buffer,
+            tags: *const u8,
+            message: *const u8,
+            strip_colors: i32,
+            callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    buffer: *mut t_gui_buffer,
+                    date: time_t,
+                    tags_count: i32,
+                    tags: *mut *const u8,
+                    displayed: i32,
+                    highlight: i32,
+                    prefix: *const u8,
+                    message: *const u8,
+                ) -> i32,
+
+            callback_pointer: *const c_void,
+            callback_data: *mut c_void,
+        ) -> *mut t_hook,
+
+    pub hook_signal:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            signal: *const u8,
+            callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    signal: *const u8,
+                    type_data: *const u8,
+                    signal_data: *mut c_void,
+                ) -> i32,
+
+            callback_pointer: *const c_void,
+            callback_data: *mut c_void,
+        ) -> *mut t_hook,
+
+    pub hook_signal_send:
+        unsafe extern "C" fn(
+            signal: *const u8,
+            type_data: *const u8,
+            signal_data: *mut c_void,
+        ) -> i32,
+
+    pub hook_hsignal:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            signal: *const u8,
+            callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    signal: *const u8,
+                    hashtable: *mut t_hashtable,
+                ) -> i32,
+
+            callback_pointer: *const c_void,
+            callback_data: *mut c_void,
+        ) -> *mut t_hook,
+
+    pub hook_hsignal_send:
+        unsafe extern "C" fn(
+            signal: *const u8,
+            hashtable: *mut t_hashtable,
+        ) -> i32,
+
+    pub hook_config:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            option: *const u8,
+            callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    option: *const u8,
+                    value: *const u8,
+                ) -> i32,
+
+            callback_pointer: *const c_void,
+            callback_data: *mut c_void,
+        ) -> *mut t_hook,
+
+    pub hook_completion:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            completion_item: *const u8,
+            description: *const u8,
+            callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    completion_item: *const u8,
+                    buffer: *mut t_gui_buffer,
+                    completion: *mut t_gui_completion,
+                ) -> i32,
+
+            callback_pointer: *const c_void,
+            callback_data: *mut c_void,
+        ) -> *mut t_hook,
+
+    pub hook_completion_get_string:
+        unsafe extern "C" fn(
+            completion: *mut t_gui_completion,
+            property: *const u8,
+        ) -> *const u8,
+
+    pub hook_completion_list_add:
+        unsafe extern "C" fn(
+            completion: *mut t_gui_completion,
+            word: *const u8,
+            nick_completion: i32,
+            where_: *const u8,
+        ),
+
+    pub hook_modifier:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            modifier: *const u8,
+            callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    modifier: *const u8,
+                    modifier_data: *const u8,
+                    string: *const u8,
+                ) -> *mut u8,
+            callback_pointer: *const c_void,
+            callback_data: *mut c_void,
+        ) -> *mut t_hook,
+
+    pub hook_modifier_exec:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            modifier: *const u8,
+            modifier_data: *const u8,
+            string: *const u8,
+        ) -> *mut u8,
+
+    pub hook_info:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            info_name: *const u8,
+            description: *const u8,
+            args_description: *const u8,
+            callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    info_name: *const u8,
+                    arguments: *const u8,
+                ) -> *mut u8,
+            callback_pointer: *const c_void,
+            callback_data: *mut c_void,
+        ) -> *mut t_hook,
+
+    pub hook_info_hashtable:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            info_name: *const u8,
+            description: *const u8,
+            args_description: *const u8,
+            output_description: *const u8,
+            callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    info_name: *const u8,
+                    hashtable: *mut t_hashtable,
+                ) -> *mut t_hashtable,
+            callback_pointer: *const c_void,
+            callback_data: *mut c_void,
+        ) -> *mut t_hook,
+
+    pub hook_infolist:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            infolist_name: *const u8,
+            description: *const u8,
+            pointer_description: *const u8,
+            args_description: *const u8,
+            callback:
+                unsafe extern "C" fn(
+                    cb_pointer: *const c_void,
+                    data: *mut c_void,
+                    infolist_name: *const u8,
+                    obj_pointer: *mut c_void,
+                    arguments: *const u8,
+                ) -> *mut t_infolist,
+            callback_pointer: *const c_void,
+            callback_data: *mut c_void,
+        ) -> *mut t_hook,
+
+    pub hook_hdata:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            hdata_name: *const u8,
+            description: *const u8,
+            callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    hdata_name: *const u8,
+                ) -> *mut t_hdata,
+            callback_pointer: *const c_void,
+            callback_data: *mut c_void,
+        ) -> *mut t_hook,
+
+    pub hook_focus:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            area: *const u8,
+            callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    info: *mut t_hashtable,
+                ) -> *mut t_hashtable,
+            callback_pointer: *const c_void,
+            callback_data: *mut c_void,
+        ) -> *mut t_hook,
+
+    pub hook_set:
+        unsafe extern "C" fn(
+            hook: *mut t_hook,
+            property: *const u8,
+            value: *const u8,
+        ),
+
+    pub unhook:
+        unsafe extern "C" fn(hook: *mut t_hook),
+
+    pub unhook_all:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            subplugin: *const u8,
+        ),
 
     /* buffers */
-    struct t_gui_buffer *(*buffer_new) (struct t_weechat_plugin *plugin,
-                                        const char *name,
-                                        int (*input_callback)(const void *pointer,
-                                                              void *data,
-                                                              struct t_gui_buffer *buffer,
-                                                              const char *input_data),
-                                        const void *input_callback_pointer,
-                                        void *input_callback_data,
-                                        int (*close_callback)(const void *pointer,
-                                                              void *data,
-                                                              struct t_gui_buffer *buffer),
-                                        const void *close_callback_pointer,
-                                        void *close_callback_data);
-    struct t_gui_buffer *(*buffer_search) (const char *plugin, const char *name);
-    struct t_gui_buffer *(*buffer_search_main) ();
-    void (*buffer_clear) (struct t_gui_buffer *buffer);
-    void (*buffer_close) (struct t_gui_buffer *buffer);
-    void (*buffer_merge) (struct t_gui_buffer *buffer,
-                           struct t_gui_buffer *target_buffer);
-    void (*buffer_unmerge) (struct t_gui_buffer *buffer, int number);
-    int (*buffer_get_integer) (struct t_gui_buffer *buffer,
-                               const char *property);
-    const char *(*buffer_get_string) (struct t_gui_buffer *buffer,
-                                      const char *property);
-    void *(*buffer_get_pointer) (struct t_gui_buffer *buffer,
-                                 const char *property);
-    void (*buffer_set) (struct t_gui_buffer *buffer, const char *property,
-                        const char *value);
-    void (*buffer_set_pointer) (struct t_gui_buffer *buffer,
-                                const char *property, void *pointer);
-    char *(*buffer_string_replace_local_var) (struct t_gui_buffer *buffer,
-                                              const char *string);
-    int (*buffer_match_list) (struct t_gui_buffer *buffer, const char *string);
+    pub buffer_new:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            name: *const u8,
+            input_callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    buffer: *mut t_gui_buffer,
+                    input_data: *const u8,
+                ) -> i32,
+            input_callback_pointer: *const c_void,
+            input_callback_data: *mut c_void,
+            close_callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    buffer: *mut t_gui_buffer,
+                ) -> i32,
+            close_callback_pointer: *const c_void,
+            close_callback_data: *mut c_void,
+        ) -> *mut t_gui_buffer,
+
+    pub buffer_search:
+        unsafe extern "C" fn(
+            plugin: *const u8,
+            name: *const u8,
+        ) -> *mut t_gui_buffer,
+
+    pub buffer_search_main:
+        unsafe extern "C" fn() -> *mut t_gui_buffer,
+
+    pub buffer_clear:
+        unsafe extern "C" fn(buffer: *mut t_gui_buffer),
+
+    pub buffer_close:
+        unsafe extern "C" fn(buffer: *mut t_gui_buffer),
+
+    pub buffer_merge:
+        unsafe extern "C" fn(buffer: *mut t_gui_buffer, target_buffer: *mut t_gui_buffer),
+
+    pub buffer_unmerge:
+        unsafe extern "C" fn(buffer: *mut t_gui_buffer, number: i32),
+
+    pub buffer_get_integer:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            property: *const u8,
+        ) -> i32,
+
+    pub buffer_get_string:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            property: *const u8,
+        ) -> *const u8,
+
+    pub buffer_get_pointer:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            property: *const u8,
+        ) -> *mut c_void,
+
+    pub buffer_set:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            property: *const u8,
+            value: *const u8,
+        ),
+
+    pub buffer_set_pointer:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            property: *const u8,
+            pointer: *mut c_void,
+        ),
+
+    pub buffer_string_replace_local_var:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            string: *const u8,
+        ) -> *mut u8,
+
+    pub buffer_match_list:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            string: *const u8,
+        ) -> i32,
 
     /* windows */
     struct t_gui_window *(*window_search_with_buffer) (struct t_gui_buffer *buffer);
