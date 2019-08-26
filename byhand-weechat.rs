@@ -775,56 +775,120 @@ pub struct t_weechat_plugin {
             arraylist: *mut t_arraylist
         ),
 
-    // ~~~ PAUSE ~~~
-
     /* hash tables */
-    struct t_hashtable *(*hashtable_new) (int size,
-                                          const char *type_keys,
-                                          const char *type_values,
-                                          unsigned long long (*callback_hash_key)(struct t_hashtable *hashtable,
-                                                                                  const void *key),
-                                          int (*callback_keycmp)(struct t_hashtable *hashtable,
-                                                                 const void *key1,
-                                                                 const void *key2));
-    struct t_hashtable_item *(*hashtable_set_with_size) (struct t_hashtable *hashtable,
-                                                         const void *key,
-                                                         int key_size,
-                                                         const void *value,
-                                                         int value_size);
-    struct t_hashtable_item *(*hashtable_set) (struct t_hashtable *hashtable,
-                                               const void *key,
-                                               const void *value);
-    void *(*hashtable_get) (struct t_hashtable *hashtable, const void *key);
-    int (*hashtable_has_key) (struct t_hashtable *hashtable, const void *key);
-    void (*hashtable_map) (struct t_hashtable *hashtable,
-                           void (*callback_map) (void *data,
-                                                 struct t_hashtable *hashtable,
-                                                 const void *key,
-                                                 const void *value),
-                           void *callback_map_data);
-    void (*hashtable_map_string) (struct t_hashtable *hashtable,
-                                  void (*callback_map) (void *data,
-                                                        struct t_hashtable *hashtable,
-                                                        const char *key,
-                                                        const char *value),
-                                  void *callback_map_data);
-    struct t_hashtable *(*hashtable_dup) (struct t_hashtable *hashtable);
-    int (*hashtable_get_integer) (struct t_hashtable *hashtable,
-                                  const char *property);
-    const char *(*hashtable_get_string) (struct t_hashtable *hashtable,
-                                         const char *property);
-    void (*hashtable_set_pointer) (struct t_hashtable *hashtable,
-                                   const char *property,
-                                   void *pointer);
-    int (*hashtable_add_to_infolist) (struct t_hashtable *hashtable,
-                                      struct t_infolist_item *infolist_item,
-                                      const char *prefix);
-    int (*hashtable_add_from_infolist) (struct t_hashtable *hashtable,
-                                        struct t_infolist *infolist,
-                                        const char *prefix);
-    void (*hashtable_remove) (struct t_hashtable *hashtable, const void *key);
-    void (*hashtable_remove_all) (struct t_hashtable *hashtable);
-    void (*hashtable_free) (struct t_hashtable *hashtable);
+    pub hashtable_new:
+        unsafe extern "C" fn(
+            size: i32,
+            type_keys: *const u8,
+            type_values: *const u8,
+            callback_hash_key:
+                unsafe extern "C" fn(
+                    hashtable: *mut t_hashtable,
+                    key: *const c_void,
+                ) -> i64,
+            callback_keycmp:
+                unsafe extern "C" fn(
+                    hashtable: *mut t_hashtable,
+                    key1: *const c_void,
+                    key2: *const c_void,
+                ) -> i32,
+            >,
+        ) -> *mut t_hashtable,
+    pub hashtable_set_with_size:
+        unsafe extern "C" fn(
+            hashtable: *mut t_hashtable,
+            key: *const c_void,
+            key_size: i32,
+            value: *const c_void,
+            value_size: i32,
+        ) -> *mut t_hashtable_item,
+    pub hashtable_set:
+        unsafe extern "C" fn(
+            hashtable: *mut t_hashtable,
+            key: *const c_void,
+            value: *const c_void,
+        ) -> *mut t_hashtable_item,
+    pub hashtable_get:
+        unsafe extern "C" fn(
+            hashtable: *mut t_hashtable,
+            key: *const c_void,
+        ) -> *mut c_void,
+    pub hashtable_has_key:
+        unsafe extern "C" fn(
+            hashtable: *mut t_hashtable,
+            key: *const c_void,
+        ) -> i32,
+    pub hashtable_map:
+        unsafe extern "C" fn(
+            hashtable: *mut t_hashtable,
+            callback_map:
+                unsafe extern "C" fn(
+                    data: *mut c_void,
+                    hashtable: *mut t_hashtable,
+                    key: *const c_void,
+                    value: *const c_void,
+                ),
+            callback_map_data: *mut c_void,
+        ),
+    pub hashtable_map_string:
+        unsafe extern "C" fn(
+            hashtable: *mut t_hashtable,
+            callback_map:
+                unsafe extern "C" fn(
+                    data: *mut c_void,
+                    hashtable: *mut t_hashtable,
+                    key: *const u8,
+                    value: *const u8,
+                ),
+            callback_map_data: *mut c_void,
+        ),
+    pub hashtable_dup:
+        unsafe extern "C" fn(
+            hashtable: *mut t_hashtable
+        ) -> *mut t_hashtable,
+    pub hashtable_get_integer:
+        unsafe extern "C" fn(
+            hashtable: *mut t_hashtable,
+            property: *const u8,
+        ) -> i32,
+    pub hashtable_get_string:
+        unsafe extern "C" fn(
+            hashtable: *mut t_hashtable,
+            property: *const u8,
+        ) -> *const u8,
+    pub hashtable_set_pointer:
+        unsafe extern "C" fn(
+            hashtable: *mut t_hashtable,
+            property: *const u8,
+            pointer: *mut c_void,
+        ),
+    pub hashtable_add_to_infolist:
+        unsafe extern "C" fn(
+            hashtable: *mut t_hashtable,
+            infolist_item: *mut t_infolist_item,
+            prefix: *const u8,
+        ) -> i32,
+    pub hashtable_add_from_infolist:
+        unsafe extern "C" fn(
+            hashtable: *mut t_hashtable,
+            infolist: *mut t_infolist,
+            prefix: *const u8,
+        ) -> i32,
+    pub hashtable_remove:
+        unsafe extern "C" fn(
+            hashtable: *mut t_hashtable,
+            key: *const c_void
+        ),
+    pub hashtable_remove_all:
+        unsafe extern "C" fn(
+            hashtable: *mut t_hashtable
+        ),
+    pub hashtable_free:
+        unsafe extern "C" fn(
+            hashtable: *mut t_hashtable
+        ),
+
+    // ~~~ PAUSE ~~~
 
     /* config files */
     struct t_config_file *(*config_new) (struct t_weechat_plugin *plugin,
