@@ -2012,62 +2012,154 @@ pub struct t_weechat_plugin {
         unsafe extern "C" fn(bar: *mut t_gui_bar),
 
     /* command */
-    int (*command) (struct t_weechat_plugin *plugin,
-                    struct t_gui_buffer *buffer, const char *command);
-    int (*command_options) (struct t_weechat_plugin *plugin,
-                            struct t_gui_buffer *buffer, const char *command,
-                            struct t_hashtable *options);
+    pub command:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            buffer: *mut t_gui_buffer,
+            command: *const u8,
+        ) -> i32,
+
+    pub command_options:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            buffer: *mut t_gui_buffer,
+            command: *const u8,
+            options: *mut t_hashtable,
+        ) -> i32,
 
     /* network */
-    int (*network_pass_proxy) (const char *proxy, int sock,
-                               const char *address, int port);
-    int (*network_connect_to) (const char *proxy,
-                               struct sockaddr *address,
-                               socklen_t address_length);
+    pub network_pass_proxy:
+        unsafe extern "C" fn(
+            proxy: *const u8,
+            sock: i32,
+            address: *const u8,
+            port: i32,
+        ) -> i32,
+
+    pub network_connect_to:
+        unsafe extern "C" fn(
+            proxy: *const u8,
+            address: *mut sockaddr,
+            address_length: socklen_t,
+        ) -> i32,
 
     /* infos */
-    char *(*info_get) (struct t_weechat_plugin *plugin, const char *info_name,
-                       const char *arguments);
-    struct t_hashtable *(*info_get_hashtable) (struct t_weechat_plugin *plugin,
-                                               const char *info_name,
-                                               struct t_hashtable *hashtable);
+    pub info_get:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            info_name: *const u8,
+            arguments: *const u8,
+        ) -> *mut u8,
+
+    pub info_get_hashtable:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            info_name: *const u8,
+            hashtable: *mut t_hashtable,
+        ) -> *mut t_hashtable,
 
     /* infolists */
-    struct t_infolist *(*infolist_new) (struct t_weechat_plugin *plugin);
-    struct t_infolist_item *(*infolist_new_item) (struct t_infolist *infolist);
-    struct t_infolist_var *(*infolist_new_var_integer) (struct t_infolist_item *item,
-                                                        const char *name,
-                                                        int value);
-    struct t_infolist_var *(*infolist_new_var_string) (struct t_infolist_item *item,
-                                                       const char *name,
-                                                       const char *value);
-    struct t_infolist_var *(*infolist_new_var_pointer) (struct t_infolist_item *item,
-                                                        const char *name,
-                                                        void *pointer);
-    struct t_infolist_var *(*infolist_new_var_buffer) (struct t_infolist_item *item,
-                                                       const char *name,
-                                                       void *pointer,
-                                                       int size);
-    struct t_infolist_var *(*infolist_new_var_time) (struct t_infolist_item *item,
-                                                     const char *name,
-                                                     time_t time);
-    struct t_infolist_var *(*infolist_search_var) (struct t_infolist *infolist,
-                                                   const char *name);
-    struct t_infolist *(*infolist_get) (struct t_weechat_plugin *plugin,
-                                        const char *infolist_name,
-                                        void *pointer,
-                                        const char *arguments);
-    int (*infolist_next) (struct t_infolist *infolist);
-    int (*infolist_prev) (struct t_infolist *infolist);
-    void (*infolist_reset_item_cursor) (struct t_infolist *infolist);
-    const char *(*infolist_fields) (struct t_infolist *infolist);
-    int (*infolist_integer) (struct t_infolist *infolist, const char *var);
-    const char *(*infolist_string) (struct t_infolist *infolist, const char *var);
-    void *(*infolist_pointer) (struct t_infolist *infolist, const char *var);
-    void *(*infolist_buffer) (struct t_infolist *infolist, const char *var,
-                              int *size);
-    time_t (*infolist_time) (struct t_infolist *infolist, const char *var);
-    void (*infolist_free) (struct t_infolist *infolist);
+    pub infolist_new:
+        unsafe extern "C" fn(plugin: *mut t_weechat_plugin) -> *mut t_infolist,
+
+    pub infolist_new_item:
+        unsafe extern "C" fn(infolist: *mut t_infolist) -> *mut t_infolist_item,
+
+    pub infolist_new_var_integer:
+        unsafe extern "C" fn(
+            item: *mut t_infolist_item,
+            name: *const u8,
+            value: i32,
+        ) -> *mut t_infolist_var,
+
+    pub infolist_new_var_string:
+        unsafe extern "C" fn(
+            item: *mut t_infolist_item,
+            name: *const u8,
+            value: *const u8,
+        ) -> *mut t_infolist_var,
+
+    pub infolist_new_var_pointer:
+        unsafe extern "C" fn(
+            item: *mut t_infolist_item,
+            name: *const u8,
+            pointer: *mut c_void,
+        ) -> *mut t_infolist_var,
+
+    pub infolist_new_var_buffer:
+        unsafe extern "C" fn(
+            item: *mut t_infolist_item,
+            name: *const u8,
+            pointer: *mut c_void,
+            size: i32,
+        ) -> *mut t_infolist_var,
+
+    pub infolist_new_var_time:
+        unsafe extern "C" fn(
+            item: *mut t_infolist_item,
+            name: *const u8,
+            time: time_t,
+        ) -> *mut t_infolist_var,
+
+    pub infolist_search_var:
+        unsafe extern "C" fn(
+            infolist: *mut t_infolist,
+            name: *const u8,
+        ) -> *mut t_infolist_var,
+
+    pub infolist_get:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            infolist_name: *const u8,
+            pointer: *mut c_void,
+            arguments: *const u8,
+        ) -> *mut t_infolist,
+
+    pub infolist_next:
+        unsafe extern "C" fn(infolist: *mut t_infolist) -> i32,
+
+    pub infolist_prev:
+        unsafe extern "C" fn(infolist: *mut t_infolist) -> i32,
+
+    pub infolist_reset_item_cursor:
+        unsafe extern "C" fn(infolist: *mut t_infolist),
+
+    pub infolist_fields:
+        unsafe extern "C" fn(infolist: *mut t_infolist) -> *const u8,
+
+    pub infolist_integer:
+        unsafe extern "C" fn(
+            infolist: *mut t_infolist,
+            var: *const u8,
+        ) -> i32,
+
+    pub infolist_string:
+        unsafe extern "C" fn(
+            infolist: *mut t_infolist,
+            var: *const u8,
+        ) -> *const u8,
+
+    pub infolist_pointer:
+        unsafe extern "C" fn(
+            infolist: *mut t_infolist,
+            var: *const u8,
+        ) -> *mut c_void,
+
+    pub infolist_buffer:
+        unsafe extern "C" fn(
+            infolist: *mut t_infolist,
+            var: *const u8,
+            size: *mut i32,
+        ) -> *mut c_void,
+
+    pub infolist_time:
+        unsafe extern "C" fn(
+            infolist: *mut t_infolist,
+            var: *const u8,
+        ) -> time_t,
+
+    pub infolist_free:
+        unsafe extern "C" fn(infolist: *mut t_infolist),
 
     /* hdata */
     struct t_hdata *(*hdata_new) (struct t_weechat_plugin *plugin,
