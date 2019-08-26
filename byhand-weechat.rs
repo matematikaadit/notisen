@@ -234,9 +234,7 @@ pub struct t_weechat_plugin {
 
     /* plugins */
     pub plugin_get_name:
-        unsafe extern "C" fn(
-            plugin: *mut t_weechat_plugin
-        ) -> *const u8,
+        unsafe extern "C" fn(plugin: *mut t_weechat_plugin) -> *const u8,
 
     /* strings */
     pub charset_set:
@@ -258,9 +256,7 @@ pub struct t_weechat_plugin {
         ) -> *mut u8,
 
     pub gettext:
-        unsafe extern "C" fn(
-            string: *const u8
-        ) -> *const u8,
+        unsafe extern "C" fn(string: *const u8) -> *const u8,
 
     pub ngettext:
         unsafe extern "C" fn(
@@ -276,14 +272,10 @@ pub struct t_weechat_plugin {
         ) -> *mut u8,
 
     pub string_tolower:
-        unsafe extern "C" fn(
-            string: *mut u8
-        ),
+        unsafe extern "C" fn(string: *mut u8),
 
     pub string_toupper:
-        unsafe extern "C" fn(
-            string: *mut u8
-        ),
+        unsafe extern "C" fn(string: *mut u8),
 
     pub strcasecmp:
         unsafe extern "C" fn(
@@ -328,9 +320,7 @@ pub struct t_weechat_plugin {
         ) -> *const u8,
 
     pub strlen_screen:
-        unsafe extern "C" fn(
-            string: *const u8
-        ) -> i32,
+        unsafe extern "C" fn(string: *const u8) -> i32,
 
     pub string_match:
         unsafe extern "C" fn(
@@ -355,9 +345,7 @@ pub struct t_weechat_plugin {
         ) -> *mut u8,
 
     pub string_expand_home:
-        unsafe extern "C" fn(
-            path: *const u8
-        ) -> *mut u8,
+        unsafe extern "C" fn(path: *const u8) -> *mut u8,
 
     pub string_eval_path_home:
         unsafe extern "C" fn(
@@ -382,14 +370,10 @@ pub struct t_weechat_plugin {
         ) -> *mut u8,
 
     pub string_convert_escaped_chars:
-        unsafe extern "C" fn(
-            string: *const u8
-        ) -> *mut u8,
+        unsafe extern "C" fn(string: *const u8) -> *mut u8,
 
     pub string_mask_to_regex:
-        unsafe extern "C" fn(
-            mask: *const u8
-        ) -> *mut u8,
+        unsafe extern "C" fn(mask: *const u8) -> *mut u8,
 
     pub string_regex_flags:
         unsafe extern "C" fn(
@@ -448,9 +432,7 @@ pub struct t_weechat_plugin {
         ) -> *mut *mut u8,
 
     pub string_free_split:
-        unsafe extern "C" fn(
-            split_string: *mut *mut u8
-        ),
+        unsafe extern "C" fn(split_string: *mut *mut u8),
 
     pub string_build_with_split_string:
         unsafe extern "C" fn(
@@ -465,14 +447,10 @@ pub struct t_weechat_plugin {
         ) -> *mut *mut u8,
 
     pub string_free_split_command:
-        unsafe extern "C" fn(
-            split_command: *mut *mut u8
-        ),
+        unsafe extern "C" fn(split_command: *mut *mut u8),
 
     pub string_format_size:
-        unsafe extern "C" fn(
-            size: u64
-        ) -> *mut u8,
+        unsafe extern "C" fn(size: u64) -> *mut u8,
 
     pub string_remove_color:
         unsafe extern "C" fn(
@@ -505,14 +483,10 @@ pub struct t_weechat_plugin {
         ) -> *mut u8,
 
     pub string_is_command_char:
-        unsafe extern "C" fn(
-            string: *const u8
-        ) -> i32,
+        unsafe extern "C" fn(string: *const u8) -> i32,
 
     pub string_input_for_buffer:
-        unsafe extern "C" fn(
-            string: *const u8,
-        ) -> *const u8,
+        unsafe extern "C" fn(string: *const u8) -> *const u8,
 
     pub string_eval_expression:
         unsafe extern "C" fn(
@@ -523,9 +497,7 @@ pub struct t_weechat_plugin {
         ) -> *mut u8,
 
     pub string_dyn_alloc:
-        unsafe extern "C" fn(
-            size_alloc: i32
-        ) -> *mut *mut u8,
+        unsafe extern "C" fn(size_alloc: i32) -> *mut *mut u8,
 
     pub string_dyn_copy:
         unsafe extern "C" fn(
@@ -547,9 +519,7 @@ pub struct t_weechat_plugin {
 
     /* UTF-8 strings */
     pub utf8_has_8bits:
-        unsafe extern "C" fn(
-            string: *const u8
-        ) -> i32,
+        unsafe extern "C" fn(string: *const u8) -> i32,
 
     pub utf8_is_valid:
         unsafe extern "C" fn(
@@ -571,24 +541,16 @@ pub struct t_weechat_plugin {
         ) -> *const u8,
 
     pub utf8_next_char:
-        unsafe extern "C" fn(
-            string: *const u8,
-        ) -> *const u8,
+        unsafe extern "C" fn(string: *const u8) -> *const u8,
 
     pub utf8_char_int:
-        unsafe extern "C" fn(
-            string: *const u8
-        ) -> i32,
+        unsafe extern "C" fn(string: *const u8) -> i32,
 
     pub utf8_char_size:
-        unsafe extern "C" fn(
-            string: *const u8
-        ) -> i32,
+        unsafe extern "C" fn(string: *const u8) -> i32,
 
     pub utf8_strlen:
-        unsafe extern "C" fn(
-            string: *const u8
-        ) -> i32,
+        unsafe extern "C" fn(string: *const u8) -> i32,
 
     pub utf8_strnlen:
         unsafe extern "C" fn(
@@ -597,9 +559,7 @@ pub struct t_weechat_plugin {
         ) -> i32,
 
     pub utf8_strlen_screen:
-        unsafe extern "C" fn(
-            string: *const u8
-        ) -> i32,
+        unsafe extern "C" fn(string: *const u8) -> i32,
 
     pub utf8_charcmp:
         unsafe extern "C" fn(
@@ -614,9 +574,7 @@ pub struct t_weechat_plugin {
         ) -> i32,
 
     pub utf8_char_size_screen:
-        unsafe extern "C" fn(
-            string: *const u8
-        ) -> i32,
+        unsafe extern "C" fn(string: *const u8) -> i32,
 
     pub utf8_add_offset:
         unsafe extern "C" fn(
@@ -675,9 +633,7 @@ pub struct t_weechat_plugin {
         ),
 
     pub file_get_content:
-        unsafe extern "C" fn(
-            filename: *const u8,
-        ) -> *mut u8,
+        unsafe extern "C" fn(filename: *const u8) -> *mut u8,
 
     /* util */
     pub util_timeval_cmp:
@@ -699,14 +655,10 @@ pub struct t_weechat_plugin {
         ),
 
     pub util_get_time_string:
-        unsafe extern "C" fn(
-            date: *const time_t
-        ) -> *const  u8,
+        unsafe extern "C" fn(date: *const time_t) -> *const  u8,
 
     pub util_version_number:
-        unsafe extern "C" fn(
-            version: *const u8
-        ) -> i32,
+        unsafe extern "C" fn(version: *const u8) -> i32,
 
     /* sorted lists */
     pub list_new:
@@ -772,14 +724,10 @@ pub struct t_weechat_plugin {
         ) -> *const u8,
 
     pub list_user_data:
-        unsafe extern "C" fn(
-            item: *mut t_weelist_item
-        ) -> *mut c_void,
+        unsafe extern "C" fn(item: *mut t_weelist_item) -> *mut c_void,
 
     pub list_size:
-        unsafe extern "C" fn(
-            weelist: *mut t_weelist
-        ) -> i32,
+        unsafe extern "C" fn(weelist: *mut t_weelist) -> i32,
 
     pub list_remove:
         unsafe extern "C" fn(
@@ -788,14 +736,10 @@ pub struct t_weechat_plugin {
         ),
 
     pub list_remove_all:
-        unsafe extern "C" fn(
-            weelist: *mut t_weelist
-        ),
+        unsafe extern "C" fn(weelist: *mut t_weelist),
 
     pub list_free:
-        unsafe extern "C" fn(
-            weelist: *mut t_weelist
-        ),
+        unsafe extern "C" fn(weelist: *mut t_weelist),
 
     /* array lists */
     pub arraylist_new:
@@ -821,9 +765,7 @@ pub struct t_weechat_plugin {
         ) -> *mut t_arraylist,
 
     pub arraylist_size:
-        unsafe extern "C" fn(
-            arraylist: *mut t_arraylist
-        ) -> i32,
+        unsafe extern "C" fn(arraylist: *mut t_arraylist) -> i32,
 
     pub arraylist_get:
         unsafe extern "C" fn(
@@ -859,14 +801,10 @@ pub struct t_weechat_plugin {
         ) -> i32,
 
     pub arraylist_clear:
-        unsafe extern "C" fn(
-            arraylist: *mut t_arraylist
-        ) -> i32,
+        unsafe extern "C" fn(arraylist: *mut t_arraylist) -> i32,
 
     pub arraylist_free:
-        unsafe extern "C" fn(
-            arraylist: *mut t_arraylist
-        ),
+        unsafe extern "C" fn(arraylist: *mut t_arraylist),
 
     /* hash tables */
     pub hashtable_new:
@@ -943,9 +881,7 @@ pub struct t_weechat_plugin {
         ),
 
     pub hashtable_dup:
-        unsafe extern "C" fn(
-            hashtable: *mut t_hashtable
-        ) -> *mut t_hashtable,
+        unsafe extern "C" fn(hashtable: *mut t_hashtable) -> *mut t_hashtable,
 
     pub hashtable_get_integer:
         unsafe extern "C" fn(
@@ -986,14 +922,10 @@ pub struct t_weechat_plugin {
         ),
 
     pub hashtable_remove_all:
-        unsafe extern "C" fn(
-            hashtable: *mut t_hashtable
-        ),
+        unsafe extern "C" fn(hashtable: *mut t_hashtable),
 
     pub hashtable_free:
-        unsafe extern "C" fn(
-            hashtable: *mut t_hashtable
-        ),
+        unsafe extern "C" fn(hashtable: *mut t_hashtable),
 
     /* config files */
     pub config_new:
@@ -1140,9 +1072,7 @@ pub struct t_weechat_plugin {
         ),
 
     pub config_string_to_boolean:
-        unsafe extern "C" fn(
-            text: *const u8
-        ) -> i32,
+        unsafe extern "C" fn(text: *const u8) -> i32,
 
     pub config_option_reset:
         unsafe extern "C" fn(
@@ -1281,8 +1211,6 @@ pub struct t_weechat_plugin {
             option_name: *const u8,
         ) -> i32,
 
-    // ~~~ PAUSE ~~~
-
     /* key bindings */
     pub key_bind:
         unsafe extern "C" fn(
@@ -1298,14 +1226,10 @@ pub struct t_weechat_plugin {
 
     /* display */
     pub prefix:
-        unsafe extern "C" fn(
-            prefix: *const u8,
-        ) -> *const u8,
+        unsafe extern "C" fn(prefix: *const u8) -> *const u8,
 
     pub color:
-        unsafe extern "C" fn(
-            color_name: *const u8,
-        ) -> *const u8,
+        unsafe extern "C" fn(color_name: *const u8) -> *const u8,
 
     pub printf_date_tags:
         unsafe extern "C" fn(
@@ -1345,7 +1269,6 @@ pub struct t_weechat_plugin {
                     argv: *mut *mut u8,
                     argv_eol: *mut *mut u8,
                 ) -> i32,
-
             callback_pointer: *const c_void,
             callback_data: *mut c_void,
         ) -> *mut t_hook,
@@ -1361,7 +1284,6 @@ pub struct t_weechat_plugin {
                     buffer: *mut t_gui_buffer,
                     command: *const u8,
                 ) -> i32,
-
             callback_pointer: *const c_void,
             callback_data: *mut c_void,
         ) -> *mut t_hook,
@@ -1378,7 +1300,6 @@ pub struct t_weechat_plugin {
                     data: *mut c_void,
                     remaining_calls: i32,
                 ) -> i32,
-
             callback_pointer: *const c_void,
             callback_data: *mut c_void,
         ) -> *mut t_hook,
@@ -1396,7 +1317,6 @@ pub struct t_weechat_plugin {
                     data: *mut c_void,
                     fd: i32,
                 ) -> i32,
-
             callback_pointer: *const c_void,
             callback_data: *mut c_void,
         ) -> *mut t_hook,
@@ -1415,7 +1335,6 @@ pub struct t_weechat_plugin {
                     out: *const u8,
                     err: *const u8,
                 ) -> i32,
-
             callback_pointer: *const c_void,
             callback_data: *mut c_void,
         ) -> *mut t_hook,
@@ -1435,7 +1354,6 @@ pub struct t_weechat_plugin {
                     out: *const u8,
                     err: *const u8,
                 ) -> i32,
-
             callback_pointer: *const c_void,
             callback_data: *mut c_void,
         ) -> *mut t_hook,
@@ -1463,7 +1381,6 @@ pub struct t_weechat_plugin {
                     error: *const u8,
                     ip_address: *const u8,
                 ) -> i32,
-
             callback_pointer: *const c_void,
             callback_data: *mut c_void,
         ) -> *mut t_hook,
@@ -1480,7 +1397,6 @@ pub struct t_weechat_plugin {
                     data: *mut c_void,
                     line: *mut t_hashtable,
                 ) -> *mut t_hashtable,
-
             callback_pointer: *const c_void,
             callback_data: *mut c_void,
         ) -> *mut t_hook,
@@ -1505,7 +1421,6 @@ pub struct t_weechat_plugin {
                     prefix: *const u8,
                     message: *const u8,
                 ) -> i32,
-
             callback_pointer: *const c_void,
             callback_data: *mut c_void,
         ) -> *mut t_hook,
@@ -1522,7 +1437,6 @@ pub struct t_weechat_plugin {
                     type_data: *const u8,
                     signal_data: *mut c_void,
                 ) -> i32,
-
             callback_pointer: *const c_void,
             callback_data: *mut c_void,
         ) -> *mut t_hook,
@@ -1545,7 +1459,6 @@ pub struct t_weechat_plugin {
                     signal: *const u8,
                     hashtable: *mut t_hashtable,
                 ) -> i32,
-
             callback_pointer: *const c_void,
             callback_data: *mut c_void,
         ) -> *mut t_hook,
@@ -1567,7 +1480,6 @@ pub struct t_weechat_plugin {
                     option: *const u8,
                     value: *const u8,
                 ) -> i32,
-
             callback_pointer: *const c_void,
             callback_data: *mut c_void,
         ) -> *mut t_hook,
@@ -1585,7 +1497,6 @@ pub struct t_weechat_plugin {
                     buffer: *mut t_gui_buffer,
                     completion: *mut t_gui_completion,
                 ) -> i32,
-
             callback_pointer: *const c_void,
             callback_data: *mut c_void,
         ) -> *mut t_hook,
@@ -1767,10 +1678,16 @@ pub struct t_weechat_plugin {
         unsafe extern "C" fn(buffer: *mut t_gui_buffer),
 
     pub buffer_merge:
-        unsafe extern "C" fn(buffer: *mut t_gui_buffer, target_buffer: *mut t_gui_buffer),
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            target_buffer: *mut t_gui_buffer
+        ),
 
     pub buffer_unmerge:
-        unsafe extern "C" fn(buffer: *mut t_gui_buffer, number: i32),
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            number: i32
+        ),
 
     pub buffer_get_integer:
         unsafe extern "C" fn(
@@ -1877,12 +1794,19 @@ pub struct t_weechat_plugin {
         ) -> *mut t_gui_nick,
 
     pub nicklist_remove_group:
-        unsafe extern "C" fn(buffer: *mut t_gui_buffer, group: *mut t_gui_nick_group),
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            group: *mut t_gui_nick_group
+        ),
 
     pub nicklist_remove_nick:
-        unsafe extern "C" fn(buffer: *mut t_gui_buffer, nick: *mut t_gui_nick),
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            nick: *mut t_gui_nick
+        ),
 
-    pub nicklist_remove_all: unsafe extern "C" fn(buffer: *mut t_gui_buffer),
+    pub nicklist_remove_all:
+        unsafe extern "C" fn(buffer: *mut t_gui_buffer),
 
     pub nicklist_get_next_item:
         unsafe extern "C" fn(
