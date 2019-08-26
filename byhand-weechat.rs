@@ -1817,101 +1817,199 @@ pub struct t_weechat_plugin {
         ) -> i32,
 
     /* windows */
-    struct t_gui_window *(*window_search_with_buffer) (struct t_gui_buffer *buffer);
-    int (*window_get_integer) (struct t_gui_window *window,
-                               const char *property);
-    const char *(*window_get_string) (struct t_gui_window *window,
-                                      const char *property);
-    void *(*window_get_pointer) (struct t_gui_window *window,
-                                 const char *property);
-    void (*window_set_title) (const char *title);
+    pub window_search_with_buffer:
+        unsafe extern "C" fn(buffer: *mut t_gui_buffer) -> *mut t_gui_window,
+
+    pub window_get_integer:
+        unsafe extern "C" fn(
+            window: *mut t_gui_window,
+            property: *const u8,
+        ) -> i32,
+
+    pub window_get_string:
+        unsafe extern "C" fn(
+            window: *mut t_gui_window,
+            property: *const u8,
+        ) -> *const u8,
+
+    pub window_get_pointer:
+        unsafe extern "C" fn(
+            window: *mut t_gui_window,
+            property: *const u8,
+        ) -> *mut c_void,
+
+    pub window_set_title:
+        unsafe extern "C" fn(title: *const u8),
 
     /* nicklist */
-    struct t_gui_nick_group *(*nicklist_add_group) (struct t_gui_buffer *buffer,
-                                                    struct t_gui_nick_group *parent_group,
-                                                    const char *name,
-                                                    const char *color,
-                                                    int visible);
-    struct t_gui_nick_group *(*nicklist_search_group) (struct t_gui_buffer *buffer,
-                                                       struct t_gui_nick_group *from_group,
-                                                       const char *name);
-    struct t_gui_nick *(*nicklist_add_nick) (struct t_gui_buffer *buffer,
-                                             struct t_gui_nick_group *group,
-                                             const char *name,
-                                             const char *color,
-                                             const char *prefix,
-                                             const char *prefix_color,
-                                             int visible);
-    struct t_gui_nick *(*nicklist_search_nick) (struct t_gui_buffer *buffer,
-                                                struct t_gui_nick_group *from_group,
-                                                const char *name);
-    void (*nicklist_remove_group) (struct t_gui_buffer *buffer,
-                                   struct t_gui_nick_group *group);
-    void (*nicklist_remove_nick) (struct t_gui_buffer *buffer,
-                                  struct t_gui_nick *nick);
-    void (*nicklist_remove_all) (struct t_gui_buffer *buffer);
-    void (*nicklist_get_next_item) (struct t_gui_buffer *buffer,
-                                    struct t_gui_nick_group **group,
-                                    struct t_gui_nick **nick);
-    int (*nicklist_group_get_integer) (struct t_gui_buffer *buffer,
-                                       struct t_gui_nick_group *group,
-                                       const char *property);
-    const char *(*nicklist_group_get_string) (struct t_gui_buffer *buffer,
-                                              struct t_gui_nick_group *group,
-                                              const char *property);
-    void *(*nicklist_group_get_pointer) (struct t_gui_buffer *buffer,
-                                         struct t_gui_nick_group *group,
-                                         const char *property);
-    void (*nicklist_group_set) (struct t_gui_buffer *buffer,
-                                struct t_gui_nick_group *group,
-                                const char *property, const char *value);
-    int (*nicklist_nick_get_integer) (struct t_gui_buffer *buffer,
-                                      struct t_gui_nick *nick,
-                                      const char *property);
-    const char *(*nicklist_nick_get_string) (struct t_gui_buffer *buffer,
-                                             struct t_gui_nick *nick,
-                                             const char *property);
-    void *(*nicklist_nick_get_pointer) (struct t_gui_buffer *buffer,
-                                        struct t_gui_nick *nick,
-                                        const char *property);
-    void (*nicklist_nick_set) (struct t_gui_buffer *buffer,
-                               struct t_gui_nick *nick,
-                               const char *property, const char *value);
+    pub nicklist_add_group:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            parent_group: *mut t_gui_nick_group,
+            name: *const u8,
+            color: *const u8,
+            visible: i32,
+        ) -> *mut t_gui_nick_group,
+
+    pub nicklist_search_group:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            from_group: *mut t_gui_nick_group,
+            name: *const u8,
+        ) -> *mut t_gui_nick_group,
+
+    pub nicklist_add_nick:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            group: *mut t_gui_nick_group,
+            name: *const u8,
+            color: *const u8,
+            prefix: *const u8,
+            prefix_color: *const u8,
+            visible: i32,
+        ) -> *mut t_gui_nick,
+
+    pub nicklist_search_nick:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            from_group: *mut t_gui_nick_group,
+            name: *const u8,
+        ) -> *mut t_gui_nick,
+
+    pub nicklist_remove_group:
+        unsafe extern "C" fn(buffer: *mut t_gui_buffer, group: *mut t_gui_nick_group),
+
+    pub nicklist_remove_nick:
+        unsafe extern "C" fn(buffer: *mut t_gui_buffer, nick: *mut t_gui_nick),
+
+    pub nicklist_remove_all: unsafe extern "C" fn(buffer: *mut t_gui_buffer),
+
+    pub nicklist_get_next_item:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            group: *mut *mut t_gui_nick_group,
+            nick: *mut *mut t_gui_nick,
+        ),
+
+    pub nicklist_group_get_integer:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            group: *mut t_gui_nick_group,
+            property: *const u8,
+        ) -> i32,
+
+    pub nicklist_group_get_string:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            group: *mut t_gui_nick_group,
+            property: *const u8,
+        ) -> *const u8,
+
+    pub nicklist_group_get_pointer:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            group: *mut t_gui_nick_group,
+            property: *const u8,
+        ) -> *mut c_void,
+
+    pub nicklist_group_set:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            group: *mut t_gui_nick_group,
+            property: *const u8,
+            value: *const u8,
+        ),
+
+    pub nicklist_nick_get_integer:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            nick: *mut t_gui_nick,
+            property: *const u8,
+        ) -> i32,
+
+    pub nicklist_nick_get_string:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            nick: *mut t_gui_nick,
+            property: *const u8,
+        ) -> *const u8,
+
+    pub nicklist_nick_get_pointer:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            nick: *mut t_gui_nick,
+            property: *const u8,
+        ) -> *mut c_void,
+
+    pub nicklist_nick_set:
+        unsafe extern "C" fn(
+            buffer: *mut t_gui_buffer,
+            nick: *mut t_gui_nick,
+            property: *const u8,
+            value: *const u8,
+        ),
 
     /* bars */
-    struct t_gui_bar_item *(*bar_item_search) (const char *name);
-    struct t_gui_bar_item *(*bar_item_new) (struct t_weechat_plugin *plugin,
-                                            const char *name,
-                                            char *(*build_callback)(const void *pointer,
-                                                                    void *data,
-                                                                    struct t_gui_bar_item *item,
-                                                                    struct t_gui_window *window,
-                                                                    struct t_gui_buffer *buffer,
-                                                                    struct t_hashtable *extra_info),
-                                            const void *build_callback_pointer,
-                                            void *build_callback_data);
-    void (*bar_item_update) (const char *name);
-    void (*bar_item_remove) (struct t_gui_bar_item *item);
-    struct t_gui_bar *(*bar_search) (const char *name);
-    struct t_gui_bar *(*bar_new) (const char *name,
-                                  const char *hidden,
-                                  const char *priority,
-                                  const char *type,
-                                  const char *condition,
-                                  const char *position,
-                                  const char *filling_top_bottom,
-                                  const char *filling_left_right,
-                                  const char *size,
-                                  const char *size_max,
-                                  const char *color_fg,
-                                  const char *color_delim,
-                                  const char *color_bg,
-                                  const char *separator,
-                                  const char *items);
-    int (*bar_set) (struct t_gui_bar *bar, const char *property,
-                    const char *value);
-    void (*bar_update) (const char *name);
-    void (*bar_remove) (struct t_gui_bar *bar);
+    pub bar_item_search:
+        unsafe extern "C" fn(name: *const u8) -> *mut t_gui_bar_item,
+
+    pub bar_item_new:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            name: *const u8,
+            build_callback:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    item: *mut t_gui_bar_item,
+                    window: *mut t_gui_window,
+                    buffer: *mut t_gui_buffer,
+                    extra_info: *mut t_hashtable,
+                ) -> *mut u8,
+            build_callback_pointer: *const c_void,
+            build_callback_data: *mut c_void,
+        ) -> *mut t_gui_bar_item,
+
+    pub bar_item_update:
+        unsafe extern "C" fn(name: *const u8),
+
+    pub bar_item_remove:
+        unsafe extern "C" fn(item: *mut t_gui_bar_item),
+
+    pub bar_search:
+        unsafe extern "C" fn(name: *const u8) -> *mut t_gui_bar,
+
+    pub bar_new:
+        unsafe extern "C" fn(
+            name: *const u8,
+            hidden: *const u8,
+            priority: *const u8,
+            type_: *const u8,
+            condition: *const u8,
+            position: *const u8,
+            filling_top_bottom: *const u8,
+            filling_left_right: *const u8,
+            size: *const u8,
+            size_max: *const u8,
+            color_fg: *const u8,
+            color_delim: *const u8,
+            color_bg: *const u8,
+            separator: *const u8,
+            items: *const u8,
+        ) -> *mut t_gui_bar,
+
+    pub bar_set:
+        unsafe extern "C" fn(
+            bar: *mut t_gui_bar,
+            property: *const u8,
+            value: *const u8,
+        ) -> i32,
+
+    pub bar_update:
+        unsafe extern "C" fn(name: *const u8),
+
+    pub bar_remove:
+        unsafe extern "C" fn(bar: *mut t_gui_bar),
 
     /* command */
     int (*command) (struct t_weechat_plugin *plugin,
