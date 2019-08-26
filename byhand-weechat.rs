@@ -1004,69 +1004,170 @@ pub struct t_weechat_plugin {
             callback_delete_data: *mut c_void,
         ) -> *mut t_config_option,
 
-    // ~~~ PAUSE ~~~
+    pub config_search_option:
+        unsafe extern "C" fn(
+            config_file: *mut t_config_file,
+            section: *mut t_config_section,
+            option_name: *const u8,
+        ) -> *mut t_config_option,
+    pub config_search_section_option:
+        unsafe extern "C" fn(
+            config_file: *mut t_config_file,
+            section: *mut t_config_section,
+            option_name: *const u8,
+            section_found: *mut *mut t_config_section,
+            option_found: *mut *mut t_config_option,
+        ),
+    pub config_search_with_string:
+        unsafe extern "C" fn(
+            option_name: *const u8,
+            config_file: *mut *mut t_config_file,
+            section: *mut *mut t_config_section,
+            option: *mut *mut t_config_option,
+            pos_option_name: *mut *mut u8,
+        ),
+    pub config_string_to_boolean:
+        unsafe extern "C" fn(
+            text: *const u8
+        ) -> i32,
+    pub config_option_reset:
+        unsafe extern "C" fn(
+            option: *mut t_config_option,
+            run_callback: i32,
+        ) -> i32,
 
-    struct t_config_option *(*config_search_option) (struct t_config_file *config_file,
-                                                     struct t_config_section *section,
-                                                     const char *option_name);
-    void (*config_search_section_option) (struct t_config_file *config_file,
-                                          struct t_config_section *section,
-                                          const char *option_name,
-                                          struct t_config_section **section_found,
-                                          struct t_config_option **option_found);
-    void (*config_search_with_string) (const char *option_name,
-                                       struct t_config_file **config_file,
-                                       struct t_config_section **section,
-                                       struct t_config_option **option,
-                                       char **pos_option_name);
-    int (*config_string_to_boolean) (const char *text);
-    int (*config_option_reset) (struct t_config_option *option,
-                                int run_callback);
-    int (*config_option_set) (struct t_config_option *option,
-                              const char *value, int run_callback);
-    int (*config_option_set_null) (struct t_config_option *option,
-                                   int run_callback);
-    int (*config_option_unset) (struct t_config_option *option);
-    void (*config_option_rename) (struct t_config_option *option,
-                                  const char *new_name);
-    const char *(*config_option_get_string) (struct t_config_option *option,
-                                             const char *property);
-    void *(*config_option_get_pointer) (struct t_config_option *option,
-                                        const char *property);
-    int (*config_option_is_null) (struct t_config_option *option);
-    int (*config_option_default_is_null) (struct t_config_option *option);
-    int (*config_boolean) (struct t_config_option *option);
-    int (*config_boolean_default) (struct t_config_option *option);
-    int (*config_integer) (struct t_config_option *option);
-    int (*config_integer_default) (struct t_config_option *option);
-    const char *(*config_string) (struct t_config_option *option);
-    const char *(*config_string_default) (struct t_config_option *option);
-    const char *(*config_color) (struct t_config_option *option);
-    const char *(*config_color_default) (struct t_config_option *option);
-    int (*config_write_option) (struct t_config_file *config_file,
-                                struct t_config_option *option);
-    int (*config_write_line) (struct t_config_file *config_file,
-                              const char *option_name,
-                              const char *value, ...);
-    int (*config_write) (struct t_config_file *config_file);
-    int (*config_read) (struct t_config_file *config_file);
-    int (*config_reload) (struct t_config_file *config_file);
-    void (*config_option_free) (struct t_config_option *option);
-    void (*config_section_free_options) (struct t_config_section *section);
-    void (*config_section_free) (struct t_config_section *section);
-    void (*config_free) (struct t_config_file *config_file);
-    struct t_config_option *(*config_get) (const char *option_name);
-    const char *(*config_get_plugin) (struct t_weechat_plugin *plugin,
-                                      const char *option_name);
-    int (*config_is_set_plugin) (struct t_weechat_plugin *plugin,
-                                 const char *option_name);
-    int (*config_set_plugin) (struct t_weechat_plugin *plugin,
-                              const char *option_name, const char *value);
-    void (*config_set_desc_plugin) (struct t_weechat_plugin *plugin,
-                                    const char *option_name,
-                                    const char *description);
-    int (*config_unset_plugin) (struct t_weechat_plugin *plugin,
-                                const char *option_name);
+    pub config_option_set:
+        unsafe extern "C" fn(
+            option: *mut t_config_option,
+            value: *const u8,
+            run_callback: i32,
+        ) -> i32,
+
+    pub config_option_set_null:
+        unsafe extern "C" fn(
+            option: *mut t_config_option,
+            run_callback: i32,
+        ) -> i32,
+
+    pub config_option_unset:
+        unsafe extern "C" fn(option: *mut t_config_option) -> i32,
+
+    pub config_option_rename:
+        unsafe extern "C" fn(option: *mut t_config_option, new_name: *const u8),
+
+    pub config_option_get_string:
+        unsafe extern "C" fn(
+            option: *mut t_config_option,
+            property: *const u8,
+        ) -> *const u8,
+
+    pub config_option_get_pointer:
+        unsafe extern "C" fn(
+            option: *mut t_config_option,
+            property: *const u8,
+        ) -> *mut c_void,
+
+    pub config_option_is_null:
+        unsafe extern "C" fn(option: *mut t_config_option) -> i32,
+
+    pub config_option_default_is_null:
+        unsafe extern "C" fn(option: *mut t_config_option) -> i32,
+
+    pub config_boolean:
+        unsafe extern "C" fn(option: *mut t_config_option) -> i32,
+
+    pub config_boolean_default:
+        unsafe extern "C" fn(option: *mut t_config_option) -> i32,
+
+    pub config_integer:
+        unsafe extern "C" fn(option: *mut t_config_option) -> i32,
+
+    pub config_integer_default:
+        unsafe extern "C" fn(option: *mut t_config_option) -> i32,
+
+    pub config_string:
+        unsafe extern "C" fn(option: *mut t_config_option) -> *const u8,
+
+    pub config_string_default:
+        unsafe extern "C" fn(option: *mut t_config_option) -> *const u8,
+
+    pub config_color:
+        unsafe extern "C" fn(option: *mut t_config_option) -> *const u8,
+
+    pub config_color_default:
+        unsafe extern "C" fn(option: *mut t_config_option) -> *const u8,
+
+    pub config_write_option:
+        unsafe extern "C" fn(
+            config_file: *mut t_config_file,
+            option: *mut t_config_option,
+        ) -> i32,
+
+    pub config_write_line:
+        unsafe extern "C" fn(
+            config_file: *mut t_config_file,
+            option_name: *const u8,
+            value: *const u8,
+            ...
+        ) -> i32,
+
+    pub config_write:
+        unsafe extern "C" fn(config_file: *mut t_config_file) -> i32,
+
+    pub config_read:
+        unsafe extern "C" fn(config_file: *mut t_config_file) -> i32,
+
+    pub config_reload:
+        unsafe extern "C" fn(config_file: *mut t_config_file) -> i32,
+
+    pub config_option_free:
+        unsafe extern "C" fn(option: *mut t_config_option),
+
+    pub config_section_free_options:
+        unsafe extern "C" fn(section: *mut t_config_section),
+
+    pub config_section_free:
+        unsafe extern "C" fn(section: *mut t_config_section),
+
+    pub config_free:
+        unsafe extern "C" fn(config_file: *mut t_config_file),
+
+    pub config_get:
+        unsafe extern "C" fn(option_name: *const u8) -> *mut t_config_option,
+
+    pub config_get_plugin:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            option_name: *const u8,
+        ) -> *const u8,
+
+    pub config_is_set_plugin:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            option_name: *const u8,
+        ) -> i32,
+
+    pub config_set_plugin:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            option_name: *const u8,
+            value: *const u8,
+        ) -> i32,
+
+    pub config_set_desc_plugin:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            option_name: *const u8,
+            description: *const u8,
+        ),
+
+    pub config_unset_plugin:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            option_name: *const u8,
+        ) -> i32,
+
+    // ~~~ PAUSE ~~~
 
     /* key bindings */
     int (*key_bind) (const char *context, struct t_hashtable *keys);
