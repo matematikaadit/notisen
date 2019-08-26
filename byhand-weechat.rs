@@ -2162,79 +2162,248 @@ pub struct t_weechat_plugin {
         unsafe extern "C" fn(infolist: *mut t_infolist),
 
     /* hdata */
-    struct t_hdata *(*hdata_new) (struct t_weechat_plugin *plugin,
-                                  const char *hdata_name, const char *var_prev,
-                                  const char *var_next,
-                                  int create_allowed, int delete_allowed,
-                                  int (*callback_update)(void *data,
-                                                         struct t_hdata *hdata,
-                                                         void *pointer,
-                                                         struct t_hashtable *hashtable),
-                                  void *callback_update_data);
-    void (*hdata_new_var) (struct t_hdata *hdata, const char *name, int offset,
-                           int type, int update_allowed, const char *array_size,
-                           const char *hdata_name);
-    void (*hdata_new_list) (struct t_hdata *hdata, const char *name,
-                            void *pointer, int flags);
-    struct t_hdata *(*hdata_get) (struct t_weechat_plugin *plugin,
-                                  const char *hdata_name);
-    int (*hdata_get_var_offset) (struct t_hdata *hdata, const char *name);
-    int (*hdata_get_var_type) (struct t_hdata *hdata, const char *name);
-    const char *(*hdata_get_var_type_string) (struct t_hdata *hdata,
-                                              const char *name);
-    int (*hdata_get_var_array_size) (struct t_hdata *hdata, void *pointer,
-                                     const char *name);
-    const char *(*hdata_get_var_array_size_string) (struct t_hdata *hdata,
-                                                    void *pointer,
-                                                    const char *name);
-    const char *(*hdata_get_var_hdata) (struct t_hdata *hdata,
-                                        const char *name);
-    void *(*hdata_get_var) (struct t_hdata *hdata, void *pointer,
-                            const char *name);
-    void *(*hdata_get_var_at_offset) (struct t_hdata *hdata, void *pointer,
-                                      int offset);
-    void *(*hdata_get_list) (struct t_hdata *hdata, const char *name);
-    int (*hdata_check_pointer) (struct t_hdata *hdata, void *list,
-                                void *pointer);
-    void *(*hdata_move) (struct t_hdata *hdata, void *pointer, int count);
-    void *(*hdata_search) (struct t_hdata *hdata, void *pointer,
-                           const char *search, int move);
-    char (*hdata_char) (struct t_hdata *hdata, void *pointer,
-                        const char *name);
-    int (*hdata_integer) (struct t_hdata *hdata, void *pointer,
-                          const char *name);
-    long (*hdata_long) (struct t_hdata *hdata, void *pointer,
-                        const char *name);
-    const char *(*hdata_string) (struct t_hdata *hdata, void *pointer,
-                                 const char *name);
-    void *(*hdata_pointer) (struct t_hdata *hdata, void *pointer,
-                            const char *name);
-    time_t (*hdata_time) (struct t_hdata *hdata, void *pointer,
-                          const char *name);
-    struct t_hashtable *(*hdata_hashtable) (struct t_hdata *hdata,
-                                            void *pointer, const char *name);
-    int (*hdata_compare) (struct t_hdata *hdata,
-                          void *pointer1, void *pointer2, const char *name,
-                          int case_sensitive);
-    int (*hdata_set) (struct t_hdata *hdata, void *pointer, const char *name,
-                      const char *value);
-    int (*hdata_update) (struct t_hdata *hdata, void *pointer,
-                         struct t_hashtable *hashtable);
-    const char *(*hdata_get_string) (struct t_hdata *hdata,
-                                     const char *property);
+    pub hdata_new:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            hdata_name: *const u8,
+            var_prev: *const u8,
+            var_next: *const u8,
+            create_allowed: i32,
+            delete_allowed: i32,
+            callback_update:
+                unsafe extern "C" fn(
+                    data: *mut c_void,
+                    hdata: *mut t_hdata,
+                    pointer: *mut c_void,
+                    hashtable: *mut t_hashtable,
+                ) -> i32,
+            callback_update_data: *mut c_void,
+        ) -> *mut t_hdata,
+
+    pub hdata_new_var:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            name: *const u8,
+            offset: i32,
+            type_: i32,
+            update_allowed: i32,
+            array_size: *const u8,
+            hdata_name: *const u8,
+        ),
+
+    pub hdata_new_list:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            name: *const u8,
+            pointer: *mut c_void,
+            flags: i32,
+        ),
+
+    pub hdata_get:
+        unsafe extern "C" fn(
+            plugin: *mut t_weechat_plugin,
+            hdata_name: *const u8,
+        ) -> *mut t_hdata,
+
+    pub hdata_get_var_offset:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            name: *const u8,
+        ) -> i32,
+
+    pub hdata_get_var_type:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            name: *const u8,
+        ) -> i32,
+
+    pub hdata_get_var_type_string:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            name: *const u8,
+        ) -> *const u8,
+
+    pub hdata_get_var_array_size:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            pointer: *mut c_void,
+            name: *const u8,
+        ) -> i32,
+
+    pub hdata_get_var_array_size_string:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            pointer: *mut c_void,
+            name: *const u8,
+        ) -> *const u8,
+
+    pub hdata_get_var_hdata:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            name: *const u8,
+        ) -> *const u8,
+
+    pub hdata_get_var:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            pointer: *mut c_void,
+            name: *const u8,
+        ) -> *mut c_void,
+
+    pub hdata_get_var_at_offset:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            pointer: *mut c_void,
+            offset: i32,
+        ) -> *mut c_void,
+
+    pub hdata_get_list:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            name: *const u8,
+        ) -> *mut c_void,
+
+    pub hdata_check_pointer:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            list: *mut c_void,
+            pointer: *mut c_void,
+        ) -> i32,
+
+    pub hdata_move:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            pointer: *mut c_void,
+            count: i32,
+        ) -> *mut c_void,
+
+    pub hdata_search:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            pointer: *mut c_void,
+            search: *const u8,
+            move_: i32,
+        ) -> *mut c_void,
+
+    pub hdata_char:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            pointer: *mut c_void,
+            name: *const u8,
+        ) -> u8,
+
+    pub hdata_integer:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            pointer: *mut c_void,
+            name: *const u8,
+        ) -> i32,
+
+    pub hdata_long:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            pointer: *mut c_void,
+            name: *const u8,
+        ) -> i64,
+
+    pub hdata_string:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            pointer: *mut c_void,
+            name: *const u8,
+        ) -> *const u8,
+
+    pub hdata_pointer:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            pointer: *mut c_void,
+            name: *const u8,
+        ) -> *mut c_void,
+
+    pub hdata_time:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            pointer: *mut c_void,
+            name: *const u8,
+        ) -> time_t,
+
+    pub hdata_hashtable:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            pointer: *mut c_void,
+            name: *const u8,
+        ) -> *mut t_hashtable,
+
+    pub hdata_compare:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            pointer1: *mut c_void,
+            pointer2: *mut c_void,
+            name: *const u8,
+            case_sensitive: i32,
+        ) -> i32,
+
+    pub hdata_set:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            pointer: *mut c_void,
+            name: *const u8,
+            value: *const u8,
+        ) -> i32,
+
+    pub hdata_update:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            pointer: *mut c_void,
+            hashtable: *mut t_hashtable,
+        ) -> i32,
+
+    pub hdata_get_string:
+        unsafe extern "C" fn(
+            hdata: *mut t_hdata,
+            property: *const u8,
+        ) -> *const u8,
 
     /* upgrade */
-    struct t_upgrade_file *(*upgrade_new) (const char *filename,
-                                           int (*callback_read)(const void *pointer,
-                                                                void *data,
-                                                                struct t_upgrade_file *upgrade_file,
-                                                                int object_id,
-                                                                struct t_infolist *infolist),
-                                           const void *callback_read_pointer,
-                                           void *callback_read_data);
-    int (*upgrade_write_object) (struct t_upgrade_file *upgrade_file,
-                                 int object_id,
-                                 struct t_infolist *infolist);
-    int (*upgrade_read) (struct t_upgrade_file *upgrade_file);
-    void (*upgrade_close) (struct t_upgrade_file *upgrade_file);
-};
+    pub upgrade_new:
+        unsafe extern "C" fn(
+            filename: *const u8,
+            callback_read:
+                unsafe extern "C" fn(
+                    pointer: *const c_void,
+                    data: *mut c_void,
+                    upgrade_file: *mut t_upgrade_file,
+                    object_id: i32,
+                    infolist: *mut t_infolist,
+                ) -> i32,
+            callback_read_pointer: *const c_void,
+            callback_read_data: *mut c_void,
+        ) -> *mut t_upgrade_file,
+
+    pub upgrade_write_object:
+        unsafe extern "C" fn(
+            upgrade_file: *mut t_upgrade_file,
+            object_id: i32,
+            infolist: *mut t_infolist,
+        ) -> i32,
+
+    pub upgrade_read:
+        unsafe extern "C" fn(upgrade_file: *mut t_upgrade_file) -> i32,
+
+    pub upgrade_close:
+        unsafe extern "C" fn(upgrade_file: *mut t_upgrade_file),
+}
+
+#[test]
+fn bindgen_test_layout_t_weechat_plugin() {
+    assert_eq!(
+        ::std::mem::size_of::<t_weechat_plugin>(),
+        2424usize,
+        concat!("Size of: ", stringify!(t_weechat_plugin))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<t_weechat_plugin>(),
+        8usize,
+        concat!("Alignment of ", stringify!(t_weechat_plugin))
+    );
+}
