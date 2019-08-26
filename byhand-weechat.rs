@@ -5,6 +5,34 @@
          non_upper_case_globals,
          unused_mut)]
 
+use std::mem;
+use std::os::raw::c_void;
+
+pub type time_t = std::os::raw::c_long;
+pub type socklen_t = std::os::raw::c_uint;
+pub type sa_family_t = std::os::raw::c_ushort;
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct sockaddr {
+    pub sa_family: sa_family_t,
+    pub sa_data: [u8; 14],
+}
+
+#[test]
+fn test_layout_sockaddr() {
+    assert_eq!(
+        mem::size_of::<sockaddr>(),
+        16,
+        concat!("Size of: ", stringify!(sockaddr))
+    );
+    assert_eq!(
+        mem::align_of::<sockaddr>(),
+        2,
+        concat!("Alignment of ", stringify!(sockaddr))
+    );
+}
+
 #[repr(C)] #[derive(Debug, Copy, Clone)] pub struct t_config_option  { _unused: [u8; 0], }
 #[repr(C)] #[derive(Debug, Copy, Clone)] pub struct t_config_section { _unused: [u8; 0], }
 #[repr(C)] #[derive(Debug, Copy, Clone)] pub struct t_config_file    { _unused: [u8; 0], }
@@ -26,42 +54,46 @@
 #[repr(C)] #[derive(Debug, Copy, Clone)] pub struct t_hdata          { _unused: [u8; 0], }
 #[repr(C)] #[derive(Debug, Copy, Clone)] pub struct timeval          { _unused: [u8; 0], }
 
+#[repr(C)] #[derive(Debug, Copy, Clone)] pub struct t_hook           { pub _address: u8, }
+#[repr(C)] #[derive(Debug, Copy, Clone)] pub struct t_hashtable_item { pub _address: u8, }
+#[repr(C)] #[derive(Debug, Copy, Clone)] pub struct t_infolist_var   { pub _address: u8, }
+
 /* return codes for plugin functions */
-pub const WEECHAT_RC_OK:     i32 = 0;
-pub const WEECHAT_RC_OK_EAT: i32 = 1;
+pub const WEECHAT_RC_OK:     i32 =  0;
+pub const WEECHAT_RC_OK_EAT: i32 =  1;
 pub const WEECHAT_RC_ERROR:  i32 = -1;
 
 /* flags for string_split function */
-pub const WEECHAT_STRING_SPLIT_STRIP_LEFT:    i32 = (1 << 0)
-pub const WEECHAT_STRING_SPLIT_STRIP_RIGHT:   i32 = (1 << 1)
-pub const WEECHAT_STRING_SPLIT_COLLAPSE_SEPS: i32 = (1 << 2)
-pub const WEECHAT_STRING_SPLIT_KEEP_EOL:      i32 = (1 << 3)
+pub const WEECHAT_STRING_SPLIT_STRIP_LEFT:    i32 = (1 << 0);
+pub const WEECHAT_STRING_SPLIT_STRIP_RIGHT:   i32 = (1 << 1);
+pub const WEECHAT_STRING_SPLIT_COLLAPSE_SEPS: i32 = (1 << 2);
+pub const WEECHAT_STRING_SPLIT_KEEP_EOL:      i32 = (1 << 3);
 
 /* return codes for config read functions/callbacks */
-pub const WEECHAT_CONFIG_READ_OK:             i32 =  0
-pub const WEECHAT_CONFIG_READ_MEMORY_ERROR:   i32 = -1
-pub const WEECHAT_CONFIG_READ_FILE_NOT_FOUND: i32 = -2
+pub const WEECHAT_CONFIG_READ_OK:             i32 =  0;
+pub const WEECHAT_CONFIG_READ_MEMORY_ERROR:   i32 = -1;
+pub const WEECHAT_CONFIG_READ_FILE_NOT_FOUND: i32 = -2;
 
 /* return codes for config write functions/callbacks */
-pub const WEECHAT_CONFIG_WRITE_OK:           i32 =  0
-pub const WEECHAT_CONFIG_WRITE_ERROR:        i32 = -1
-pub const WEECHAT_CONFIG_WRITE_MEMORY_ERROR: i32 = -2
+pub const WEECHAT_CONFIG_WRITE_OK:           i32 =  0;
+pub const WEECHAT_CONFIG_WRITE_ERROR:        i32 = -1;
+pub const WEECHAT_CONFIG_WRITE_MEMORY_ERROR: i32 = -2;
 
 /* null value for option */
 // #define WEECHAT_CONFIG_OPTION_NULL                 "null"
 // still don't know how to translate this
 
 /* return codes for config option set */
-pub const WEECHAT_CONFIG_OPTION_SET_OK_CHANGED:       i32 =  2
-pub const WEECHAT_CONFIG_OPTION_SET_OK_SAME_VALUE:    i32 =  1
-pub const WEECHAT_CONFIG_OPTION_SET_ERROR:            i32 =  0
-pub const WEECHAT_CONFIG_OPTION_SET_OPTION_NOT_FOUND: i32 = -1
+pub const WEECHAT_CONFIG_OPTION_SET_OK_CHANGED:       i32 =  2;
+pub const WEECHAT_CONFIG_OPTION_SET_OK_SAME_VALUE:    i32 =  1;
+pub const WEECHAT_CONFIG_OPTION_SET_ERROR:            i32 =  0;
+pub const WEECHAT_CONFIG_OPTION_SET_OPTION_NOT_FOUND: i32 = -1;
 
 /* return codes for config option unset */
-pub const WEECHAT_CONFIG_OPTION_UNSET_OK_NO_RESET: i32 =  0
-pub const WEECHAT_CONFIG_OPTION_UNSET_OK_RESET:    i32 =  1
-pub const WEECHAT_CONFIG_OPTION_UNSET_OK_REMOVED:  i32 =  2
-pub const WEECHAT_CONFIG_OPTION_UNSET_ERROR:       i32 = -1
+pub const WEECHAT_CONFIG_OPTION_UNSET_OK_NO_RESET: i32 =  0;
+pub const WEECHAT_CONFIG_OPTION_UNSET_OK_RESET:    i32 =  1;
+pub const WEECHAT_CONFIG_OPTION_UNSET_OK_REMOVED:  i32 =  2;
+pub const WEECHAT_CONFIG_OPTION_UNSET_ERROR:       i32 = -1;
 
 /* list management (order of elements) */
 // #define WEECHAT_LIST_POS_SORT                       "sort"
@@ -76,18 +108,18 @@ pub const WEECHAT_CONFIG_OPTION_UNSET_ERROR:       i32 = -1
 // #define WEECHAT_HASHTABLE_TIME                      "time"
 
 /* types for hdata */
-pub const WEECHAT_HDATA_OTHER:         i32 = 0
-pub const WEECHAT_HDATA_CHAR:          i32 = 1
-pub const WEECHAT_HDATA_INTEGER:       i32 = 2
-pub const WEECHAT_HDATA_LONG:          i32 = 3
-pub const WEECHAT_HDATA_STRING:        i32 = 4
-pub const WEECHAT_HDATA_POINTER:       i32 = 5
-pub const WEECHAT_HDATA_TIME:          i32 = 6
-pub const WEECHAT_HDATA_HASHTABLE:     i32 = 7
-pub const WEECHAT_HDATA_SHARED_STRING: i32 = 8
+pub const WEECHAT_HDATA_OTHER:         i32 = 0;
+pub const WEECHAT_HDATA_CHAR:          i32 = 1;
+pub const WEECHAT_HDATA_INTEGER:       i32 = 2;
+pub const WEECHAT_HDATA_LONG:          i32 = 3;
+pub const WEECHAT_HDATA_STRING:        i32 = 4;
+pub const WEECHAT_HDATA_POINTER:       i32 = 5;
+pub const WEECHAT_HDATA_TIME:          i32 = 6;
+pub const WEECHAT_HDATA_HASHTABLE:     i32 = 7;
+pub const WEECHAT_HDATA_SHARED_STRING: i32 = 8;
 
 /* flags for hdata lists */
-pub const WEECHAT_HDATA_LIST_CHECK_POINTERS: i32 = 1
+pub const WEECHAT_HDATA_LIST_CHECK_POINTERS: i32 = 1;
 
 /* buffer hotlist */
 // #define WEECHAT_HOTLIST_LOW                         "0"
@@ -104,26 +136,26 @@ pub const WEECHAT_HDATA_LIST_CHECK_POINTERS: i32 = 1
  *          (note: the return code -3 is NEVER sent to script plugins,
  *           it can be used only in C API)
  */
-pub const WEECHAT_HOOK_PROCESS_RUNNING: i32 = -1
-pub const WEECHAT_HOOK_PROCESS_ERROR:   i32 = -2
-pub const WEECHAT_HOOK_PROCESS_CHILD:   i32 = -3
+pub const WEECHAT_HOOK_PROCESS_RUNNING: i32 = -1;
+pub const WEECHAT_HOOK_PROCESS_ERROR:   i32 = -2;
+pub const WEECHAT_HOOK_PROCESS_CHILD:   i32 = -3;
 
 /* connect status for connection hooked */
-pub const WEECHAT_HOOK_CONNECT_OK:                     i32 =  0
-pub const WEECHAT_HOOK_CONNECT_ADDRESS_NOT_FOUND:      i32 =  1
-pub const WEECHAT_HOOK_CONNECT_IP_ADDRESS_NOT_FOUND:   i32 =  2
-pub const WEECHAT_HOOK_CONNECT_CONNECTION_REFUSED:     i32 =  3
-pub const WEECHAT_HOOK_CONNECT_PROXY_ERROR:            i32 =  4
-pub const WEECHAT_HOOK_CONNECT_LOCAL_HOSTNAME_ERROR:   i32 =  5
-pub const WEECHAT_HOOK_CONNECT_GNUTLS_INIT_ERROR:      i32 =  6
-pub const WEECHAT_HOOK_CONNECT_GNUTLS_HANDSHAKE_ERROR: i32 =  7
-pub const WEECHAT_HOOK_CONNECT_MEMORY_ERROR:           i32 =  8
-pub const WEECHAT_HOOK_CONNECT_TIMEOUT:                i32 =  9
-pub const WEECHAT_HOOK_CONNECT_SOCKET_ERROR:           i32 = 10
+pub const WEECHAT_HOOK_CONNECT_OK:                     i32 =  0;
+pub const WEECHAT_HOOK_CONNECT_ADDRESS_NOT_FOUND:      i32 =  1;
+pub const WEECHAT_HOOK_CONNECT_IP_ADDRESS_NOT_FOUND:   i32 =  2;
+pub const WEECHAT_HOOK_CONNECT_CONNECTION_REFUSED:     i32 =  3;
+pub const WEECHAT_HOOK_CONNECT_PROXY_ERROR:            i32 =  4;
+pub const WEECHAT_HOOK_CONNECT_LOCAL_HOSTNAME_ERROR:   i32 =  5;
+pub const WEECHAT_HOOK_CONNECT_GNUTLS_INIT_ERROR:      i32 =  6;
+pub const WEECHAT_HOOK_CONNECT_GNUTLS_HANDSHAKE_ERROR: i32 =  7;
+pub const WEECHAT_HOOK_CONNECT_MEMORY_ERROR:           i32 =  8;
+pub const WEECHAT_HOOK_CONNECT_TIMEOUT:                i32 =  9;
+pub const WEECHAT_HOOK_CONNECT_SOCKET_ERROR:           i32 = 10;
 
 /* action for gnutls callback: verify or set certificate */
-pub const WEECHAT_HOOK_CONNECT_GNUTLS_CB_VERIFY_CERT: i32 = 0
-pub const WEECHAT_HOOK_CONNECT_GNUTLS_CB_SET_CERT:    i32 = 1
+pub const WEECHAT_HOOK_CONNECT_GNUTLS_CB_VERIFY_CERT: i32 = 0;
+pub const WEECHAT_HOOK_CONNECT_GNUTLS_CB_SET_CERT:    i32 = 1;
 
 /* type of data for signal hooked */
 // #define WEECHAT_HOOK_SIGNAL_STRING                  "string"
@@ -192,7 +224,6 @@ pub const WEECHAT_HOOK_CONNECT_GNUTLS_CB_SET_CERT:    i32 = 1
 //     }
 //
 
-use core::ffi::c_void;
 // or you can define it manually
 //
 //     enum c_void {
@@ -260,7 +291,7 @@ pub struct t_weechat_plugin {
 
     pub ngettext:
         unsafe extern "C" fn(
-            single *const u8,
+            single: *const u8,
             plural: *const u8,
             count: i32
         ) -> *const u8,
@@ -329,7 +360,6 @@ pub struct t_weechat_plugin {
             case_sensitive: i32,
         ) -> i32,
 
-    >,
     pub string_match_list:
         unsafe extern "C" fn(
             string: *const u8,
@@ -823,7 +853,6 @@ pub struct t_weechat_plugin {
                     key1: *const c_void,
                     key2: *const c_void,
                 ) -> i32,
-            >,
         ) -> *mut t_hashtable,
 
     pub hashtable_set_with_size:
@@ -2319,15 +2348,15 @@ pub struct t_weechat_plugin {
 }
 
 #[test]
-fn bindgen_test_layout_t_weechat_plugin() {
+fn test_layout_t_weechat_plugin() {
     assert_eq!(
-        ::std::mem::size_of::<t_weechat_plugin>(),
-        2424usize,
+        mem::size_of::<t_weechat_plugin>(),
+        2424,
         concat!("Size of: ", stringify!(t_weechat_plugin))
     );
     assert_eq!(
-        ::std::mem::align_of::<t_weechat_plugin>(),
-        8usize,
+        mem::align_of::<t_weechat_plugin>(),
+        8,
         concat!("Alignment of ", stringify!(t_weechat_plugin))
     );
 }
