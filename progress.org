@@ -82,3 +82,9 @@ For example
 
 https://kornel.ski/rust-sys-crate
 
+
+* plugin.rs done, but without string constant
+
+* Start RIIR-ing
+
+** Creating New Buffer

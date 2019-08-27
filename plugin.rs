@@ -32,6 +32,8 @@ fn test_layout_sockaddr() {
     );
 }
 
+pub const WEECHAT_PLUGIN_API_VERSION: [u8; 12] = *b"20190810-01\0";
+
 #[repr(C)] #[derive(Debug, Copy, Clone)] pub struct t_config_option  { _unused: [u8; 0], }
 #[repr(C)] #[derive(Debug, Copy, Clone)] pub struct t_config_section { _unused: [u8; 0], }
 #[repr(C)] #[derive(Debug, Copy, Clone)] pub struct t_config_file    { _unused: [u8; 0], }
