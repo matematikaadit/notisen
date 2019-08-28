@@ -16,6 +16,10 @@ edited.
 The command to compile and install the project is in the Makefile. You
 probably need specific version of weechat/weechat-plugin.h for it to works.
 
+After executing `make`, it will produce a shared object `hl.so` that you can use
+as weechat plugin by putting it in your weechat config directory. You can execute
+`make install` if you use the default weechat config location.
+
 # Todo/Future Improvement
 
 * Reduce the unsafe.
