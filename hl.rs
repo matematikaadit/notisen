@@ -141,8 +141,7 @@ unsafe extern "C" fn new_message_callback(
         );
 
         // put the [hl] buffer on hotlist
-        // TODO: why this doesn't work? maybe because no_highlight above?
-        // buffer_set(hl_buffer, b"hotlist\0".as_ptr(), b"3\0".as_ptr());
+        buffer_set(hl_buffer, b"hotlist\0".as_ptr(), b"3\0".as_ptr());
     }
     WEECHAT_RC_OK
 }
