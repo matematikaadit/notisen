@@ -88,3 +88,6 @@ https://kornel.ski/rust-sys-crate
 * Start RIIR-ing
 
 ** Creating New Buffer
+** Hook Print
+
+

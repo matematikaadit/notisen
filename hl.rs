@@ -19,7 +19,13 @@ use std::ffi::c_void;
 
 mod plugin;
 
-use plugin::{t_weechat_plugin, t_gui_buffer, WEECHAT_RC_OK, WEECHAT_PLUGIN_API_VERSION};
+use plugin::{
+    time_t,
+    t_weechat_plugin,
+    t_gui_buffer,
+    WEECHAT_RC_OK,
+    WEECHAT_PLUGIN_API_VERSION
+};
 
 #[no_mangle] pub static weechat_plugin_api_version: [u8; 12] = WEECHAT_PLUGIN_API_VERSION;
 #[no_mangle] pub static weechat_plugin_name:        [u8;  3] = *b"hl\0";
@@ -29,7 +35,11 @@ use plugin::{t_weechat_plugin, t_gui_buffer, WEECHAT_RC_OK, WEECHAT_PLUGIN_API_V
 #[no_mangle] pub static weechat_plugin_license:     [u8;  5] = *b"GPL3\0";
 #[no_mangle] pub static weechat_plugin_priority: u32 = 1000; // default priority
 
+// required
 #[no_mangle] pub static mut weechat_plugin: *mut t_weechat_plugin = null_mut();
+
+// holds our highlight buffer
+pub static mut hl_buffer: *mut t_gui_buffer = null_mut();
 
 #[no_mangle]
 pub extern "C" fn weechat_plugin_init(
@@ -40,6 +50,7 @@ pub extern "C" fn weechat_plugin_init(
     unsafe {
         weechat_plugin = plugin;
         buffer_open();
+        hook_setup();
         WEECHAT_RC_OK
     }
 }
@@ -52,13 +63,13 @@ pub extern "C" fn weechat_plugin_end(_plugin: *mut t_weechat_plugin) -> i32 {
 fn buffer_open() {
     unsafe {
         let buffer_new = (*weechat_plugin).buffer_new;
-        buffer_new(
+        hl_buffer = buffer_new(
             weechat_plugin,
             b"[hl]\0".as_ptr(),
             input_callback,
             null(),
             null_mut(),
-            output_callback,
+            close_callback,
             null(),
             null_mut(),
         );
@@ -74,10 +85,76 @@ unsafe extern "C" fn input_callback(
     WEECHAT_RC_OK
 }
 
-unsafe extern "C" fn output_callback(
+unsafe extern "C" fn close_callback(
     _pointer: *const c_void,
     _data: *mut c_void,
     _buffer: *mut t_gui_buffer,
 ) -> i32 {
+    hl_buffer = null_mut();
     WEECHAT_RC_OK
+}
+
+fn hook_setup() {
+    unsafe {
+        let hook_print = (*weechat_plugin).hook_print;
+        hook_print(
+            weechat_plugin,
+            null_mut(),
+            null(),
+            null(),
+            0,
+            new_message_callback,
+            null(),
+            null_mut(),
+        );
+    }
+}
+
+unsafe extern "C" fn new_message_callback(
+    _pointer: *const c_void,
+    _data: *mut c_void,
+    buffer: *mut t_gui_buffer,
+    date: time_t,
+    _tags_count: i32,
+    _tags: *mut *const u8,
+    displayed: i32,
+    highlight: i32,
+    prefix: *const u8,
+    message: *const u8,
+) -> i32 {
+    if highlight == 1 && displayed == 1 && is_irc_channel_buffer(buffer) {
+        let printf_date_tags = (*weechat_plugin).printf_date_tags;
+        let buffer_get_string = (*weechat_plugin).buffer_get_string;
+        let buffer_set = (*weechat_plugin).buffer_set;
+
+        let channel = buffer_get_string(buffer, b"localvar_channel\0".as_ptr());
+
+        // print the message
+        printf_date_tags(
+            hl_buffer,
+            date,
+            b"no_highlight\0".as_ptr(),
+            b"(%s) %s\t%s\0".as_ptr(),
+            channel,
+            prefix,
+            message,
+        );
+
+        // put the [hl] buffer on hotlist
+        // TODO: why this doesn't work? maybe because no_highlight above?
+        // buffer_set(hl_buffer, b"hotlist\0".as_ptr(), b"3\0".as_ptr());
+    }
+    WEECHAT_RC_OK
+}
+
+fn is_irc_channel_buffer(buffer: *mut t_gui_buffer) -> bool {
+    unsafe {
+        let buffer_get_string = (*weechat_plugin).buffer_get_string;
+        let strcasecmp = (*weechat_plugin).strcasecmp;
+
+        let plugin = buffer_get_string(buffer, b"plugin\0".as_ptr());
+        let ty = buffer_get_string(buffer, b"localvar_type\0".as_ptr());
+        strcasecmp(plugin, b"irc\0".as_ptr()) == 0 &&
+        strcasecmp(ty, b"channel\0".as_ptr()) == 0
+    }
 }
