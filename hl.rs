@@ -134,9 +134,9 @@ unsafe extern "C" fn new_message_callback(
             hl_buffer,
             date,
             b"no_highlight\0".as_ptr(),
-            b"(%s) %s\t%s\0".as_ptr(),
-            channel,
+            b"%s (%s)\t%s\0".as_ptr(),
             prefix,
+            channel,
             message,
         );
 
