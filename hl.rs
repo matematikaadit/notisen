@@ -15,10 +15,11 @@
 
 #![allow(non_upper_case_globals)]
 use std::ptr::{null, null_mut};
+use std::ffi::c_void;
 
 mod plugin;
 
-use plugin::{t_weechat_plugin, WEECHAT_RC_OK, WEECHAT_PLUGIN_API_VERSION};
+use plugin::{t_weechat_plugin, t_gui_buffer, WEECHAT_RC_OK, WEECHAT_PLUGIN_API_VERSION};
 
 #[no_mangle] pub static weechat_plugin_api_version: [u8; 12] = WEECHAT_PLUGIN_API_VERSION;
 #[no_mangle] pub static weechat_plugin_name:        [u8;  3] = *b"hl\0";
@@ -33,24 +34,50 @@ use plugin::{t_weechat_plugin, WEECHAT_RC_OK, WEECHAT_PLUGIN_API_VERSION};
 #[no_mangle]
 pub extern "C" fn weechat_plugin_init(
     plugin: *mut t_weechat_plugin,
-    argc: i32,
-    argv: *const *const u8
+    _argc: i32,
+    _argv: *const *const u8
 ) -> i32 {
     unsafe {
         weechat_plugin = plugin;
-        let printf_date_tags = (*weechat_plugin).printf_date_tags;
-        let print = |s| {
-            printf_date_tags(null_mut(), 0, null(), s);
-        };
-        print(format!("==> [hl] {} argv:\0", argc).as_ptr());
-        for i in 0..argc {
-            print(*argv.offset(i as isize));
-        }
+        buffer_open();
         WEECHAT_RC_OK
     }
 }
 
 #[no_mangle]
 pub extern "C" fn weechat_plugin_end(_plugin: *mut t_weechat_plugin) -> i32 {
+    WEECHAT_RC_OK
+}
+
+fn buffer_open() {
+    unsafe {
+        let buffer_new = (*weechat_plugin).buffer_new;
+        buffer_new(
+            weechat_plugin,
+            b"[hl]\0".as_ptr(),
+            input_callback,
+            null(),
+            null_mut(),
+            output_callback,
+            null(),
+            null_mut(),
+        );
+    }
+}
+
+unsafe extern "C" fn input_callback(
+    _pointer: *const c_void,
+    _data: *mut c_void,
+    _buffer: *mut t_gui_buffer,
+    _input_data: *const u8,
+) -> i32 {
+    WEECHAT_RC_OK
+}
+
+unsafe extern "C" fn output_callback(
+    _pointer: *const c_void,
+    _data: *mut c_void,
+    _buffer: *mut t_gui_buffer,
+) -> i32 {
     WEECHAT_RC_OK
 }
