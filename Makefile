@@ -12,7 +12,7 @@ example.o: example.c weechat-plugin.h
 	$(CC) -fPIC -Wall -c example.c
 
 uninstall:
-	rm -rf $$HOME/.weechat/plugins/example.so
+	rm -rf $$HOME/.weechat/plugins/hl.so
 
 .PHONY: install uninstall
 

@@ -25,7 +25,7 @@ as weechat plugin by putting it in your weechat config directory. You can execut
 * Reduce the unsafe.
 * Reduce the use of globals.
 * Write test.
-* Easier C string literal that automatically converted to [i8; N]. A null-terminated array of c_char. Probably using proc-macro.
+* Easier C string literal that automatically converted to `[i8; N]` (a null-terminated array of `c_char`). Probably using proc-macro.
 * Make it works for any version of weechat.
 
 # Resource
