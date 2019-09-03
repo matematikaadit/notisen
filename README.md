@@ -1,10 +1,13 @@
 # hl
 
-A rust rewrite of [highmon.pl script](https://github.com/KenjiE20/highmon) for [weechat irc client](https://weechat.org/). With less feature.
+A rust rewrite of [highmon.pl] script for [weechat] irc client. With less feature.
 
-This project is for learning the rust ffi primitives. Probably not portable. Untested outside x64 linux machine. Don't use it. If you wanna write your weechat plugin, use rust-weechat crate by poljar, link in the resource section below. It's a lot better than this cute mess.
+This project is for learning the rust ffi primitives. Probably not portable.
+Untested outside x64 linux machine. Don't use it. If you wanna write your
+weechat plugin, use rust-weechat crate by poljar (see [resource](#resource)
+section below). It's a lot better than this cute mess.
 
-Currently this already works and used daily by me (1 day to be precise as of this writing).
+Currently this already works and used daily by me (6 days to be precise).
 
 # Introduction
 
@@ -20,12 +23,17 @@ After executing `make`, it will produce a shared object `hl.so` that you can use
 as weechat plugin by putting it in your weechat config directory. You can execute
 `make install` if you use the default weechat config location.
 
+**TL;DR**
+
+* `make`
+* `make install`
+
 # Todo/Future Improvement
 
-* Reduce the unsafe.
+* Reduce the use of unsafe.
 * Reduce the use of globals.
 * Write test.
-* Easier C string literal that automatically converted to `[i8; N]` (a null-terminated array of `c_char`). Probably using proc-macro.
+* Proc macro for declaring the plugin metadata
 * Make it works for any version of weechat.
 
 # Resource
@@ -53,3 +61,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+[highmon.pl]: https://github.com/KenjiE20/highmon
+[weechat]: https://weechat.org/
