@@ -38,12 +38,12 @@ as weechat plugin by putting it in your weechat config directory. You can execut
 
 # Resource
 
-* https://github.com/rust-lang/rust-bindgen
-* https://kornel.ski/rust-sys-crate
-* https://github.com/poljar/rust-weechat
-* https://c2rust.com/
-* https://github.com/KenjiE20/highmon/
-* https://weechat.org/files/doc/devel/weechat_plugin_api.en.html
+* [bindgen](https://github.com/rust-lang/rust-bindgen)
+* [writing -sys crate](https://kornel.ski/rust-sys-crate)
+* [rust-weechat crate](https://github.com/poljar/rust-weechat)
+* [c2rust](https://c2rust.com/)
+* [highmon.pl](https://github.com/KenjiE20/highmon/)
+* [weechat's plugin api](https://weechat.org/files/doc/devel/weechat_plugin_api.en.html)
 
 # License
 
