@@ -3,13 +3,13 @@
 **Notisen** is a Rust rewrite of [highmon.pl] script for [weechat] irc client.
 Proudly with less feature and less flexibility.
 
-**highmon.pl** itself is a script that collect all *highlights* (another term
-for mention/notification on weechat). In a single buffer for easy viewing. This
+**highmon.pl** itself is a script that collects all *highlights* (another term
+for mention/notification on weechat). In a single buffer, for easy viewing. This
 script only replicate that functionality and no more. There's no setting or
-command hook, yeah, sorry to disssapoint.
+command hook, yeah, sorry to disappoint.
 
 This project itself is mainly for learning purpose. To understand how to do FFI
-in Rust. And probably just a toy that incidentally also scratch my own itch.
+in Rust. And probably just a toy that incidentally scratch my itch.
 
 If you wanna write a plugin for weechat, I recommend using the rust-weechat
 crate instead.  Link in the [**Resource**](#resource) section below.
